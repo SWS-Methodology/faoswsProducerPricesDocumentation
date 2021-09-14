@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Producer prices compilation into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Migration of Producer prices compilation into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Migration of Producer prices compilation into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2021-07-29">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="Imputation.html">
+<link rel="next" href="ShinyCode.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
+<li class="chapter" data-level="1" data-path="Harvester.html"><a href="Harvester.html"><i class="fa fa-check"></i><b>1</b> <strong>Harvester procedure and initial plugins</strong></a></li>
+<li class="chapter" data-level="2" data-path="Imputation.html"><a href="Imputation.html"><i class="fa fa-check"></i><b>2</b> <strong>Imputation plugin and validation</strong></a></li>
+<li class="chapter" data-level="3" data-path="ShinyDes.html"><a href="ShinyDes.html"><i class="fa fa-check"></i><b>3</b> <strong>Producer prices Produce Price Indices and Purchasing Power Parities</strong></a><ul>
+<li class="chapter" data-level="3.1" data-path="ShinyDes.html"><a href="ShinyDes.html#the-geary-khamis-system"><i class="fa fa-check"></i><b>3.1</b> The Geary-Khamis system</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="ShinyDes.html"><a href="ShinyDes.html#iterative-scheme"><i class="fa fa-check"></i><b>3.1.1</b> Iterative scheme</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="ShinyDes.html"><a href="ShinyDes.html#producer-prices-indices-ppis"><i class="fa fa-check"></i><b>3.2</b> Producer Prices Indices (PPIs)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ShinyCode.html"><a href="ShinyCode.html"><i class="fa fa-check"></i><b>4</b> <strong>The Producer prices validation Shiny R code</strong></a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Producer prices compilation into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ShinyDes" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> <strong>Producer prices Produce Price Indices and Purchasing Power Parities</strong></h1>
+<p>Producer Price Indices (PPI) and Purchasing Power Parities are respectively calculated through the plugins: ‘Producer Price Indices (PPI)’ and ‘Geary-Khamis’.</p>
+<div id="the-geary-khamis-system" class="section level2">
+<h2><span class="header-section-number">3.1</span> The Geary-Khamis system</h2>
+<p>There are several aggregation methods used in international comparisons of GDP. One of the known approaches uses an international set of prices and purchasing power parities to compile comparable value aggregates. The method was developed by Geary and Khamis along with the Geary-Khamis equation system (GK). The system is used to compute the international dollar, a hypothetical unit of currency that has the same Purchasing Power Parity (PPP) that the U.S. dollar had in the United States of America at a given point. According to the study FAO (1993) and considering qij the quantity of ith commodity produced in jth country during a given period, pij the price of ith commodity in jth country in local currency, M the number of countries and N the number of commodities: ‘_The GK method employs the repricing and PPP approaches concurrently, and is therefore based on the reference prices of commodities as well as the purchasing power parities. Suppose <span class="math inline">\(PPP_j\)</span> represents the parity of j-th currency with a numeraire currency, called international dollars. Then the international price <span class="math inline">\(P_i\)</span> is defined as an international average of prices of i-th commodity in different countries. As the price in different countries are expressed in respective national currencies, the GK-method uses national prices after conversion into a common currency using the PPPs. Thus the international price, <span class="math inline">\(P_i\)</span>, of i-th commodity is defined as:</p>
+<p><span class="math display">\[P_i = \sum_{j=1}^M (p_{ij}/PPP_j) \frac{q_{ij}}{ \sum_{j=1}^M q_{ij}} \]</span></p>
+<p>This equation implies that the international price of i-th commodity is calculated by dividing the total value of output of i-th commodity across all countries, converted in international dollars, using PPPs, by the total quantity produced of i-th commodity. These prices cannot be computed unless the system specifies <span class="math inline">\(PPP_j\)</span> . The GK system defines the parity of j-th currency through the equation 2:</p>
+<p><span class="math display">\[ PPP_j = \frac{ \sum_{i=1}^N p_{ij} q_{ij}}{\sum_{i=1}^N P_i q_{ij}} \]</span></p>
+<p>The numerator of the equation represents the total value of output in j-th country expressed in national currency, and the denominator is the value of j-th country output evaluated by repricing at international prices <span class="math inline">\(P_i\)</span>, in international dollars. Then <span class="math inline">\(PPP_j\)</span> gives the number of national currency units per international dollar. The Geary-Khamis system consists of equations 1 and 2, and requires the computation of the international prices Pi, and parities PPPj , which are defined using a system of simultaneous equations.’</p>
+<div id="iterative-scheme" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Iterative scheme</h3>
+<p>Specify any positive initial value for the parities, with <span class="math inline">\(PPP_1 = 1\)</span>. In the absence of any additional information, an obvious choice is to set all the parities equal to unity, i.e. <span class="math inline">\(PPP_1 = 1, PPP_2 = 1, . . . , PPP_M = 1\)</span>. These values are then substituted into the formula for the international prices <span class="math inline">\(P_i\)</span> in equation 1. Once these <span class="math inline">\(P_i\)</span>’s are computed, they are in turn, used in equation 2 to compute the parities <span class="math inline">\(PPP_j\)</span> . After normalizing the computed parities and making <span class="math inline">\(PPP_1 = 1\)</span>, these parities are compared with the initial values. If they are identical then the computation is terminated. Otherwise the computation proceeds by repeating the calculation using the new parities. These steps are repeated until the values converge. Convergence of the iterative procedure is guaranteed by the properties of the GK system discussed in Prasada Rao (1971) and Khamis (1972). Even in cases where <span class="math inline">\(M\)</span> and <span class="math inline">\(N\)</span> are very large, the procedure converges rapidly.’</p>
+<div class="figure">
+<img src="img/gk_screenshot.png" alt="Plugin-Geary-Khamis" width="100%" />
+<p class="caption">
+(#fig:gk_screenshot)Plugin-Geary-Khamis
+</p>
+</div>
+</div>
+</div>
+<div id="producer-prices-indices-ppis" class="section level2">
+<h2><span class="header-section-number">3.2</span> Producer Prices Indices (PPIs)</h2>
+<p>The FAO Agricultural Producer Price Indices measure annual changes in the selling prices received by farmers (prices at the farm-gate or at the first point of sale). The indices are constructed using price data in Standardised Local Currency (SLC). The plugin Producer Price Indices (PPI) calculates the indices for each country for the: - single item; - item groups.</p>
+<p>The process to obtain the PPI is straightforward. Please follow the steps below to get the results. - Create a new session: Click on the button New Query and choose the domain Producer Prices and the dataset Annual Producer Prices (Validated); - Run plugin: Click on the button Run plugin and select Producer Prices Indices (PPI) - Fill in the parameters as shown in the below figure (@ref(fig:ppi_screenshot))</p>
+<div class="figure">
+<img src="img/ppi_screenshot.png" alt="Plugin-Producer Prices Indices." width="100%" />
+<p class="caption">
+(#fig:ppi_screenshot)Plugin-Producer Prices Indices.
+</p>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="Imputation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ShinyCode.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,654 @@
+# **Harvester procedure and initial plugins** {#Harvester}
+
+## Producer prices harvester procedure
+
+The first step of the Producer price workflow is to launch the harvester to import the data provided by the country through questionnaires.
+The questionnaire must respect the template as shown in \@ref(fig:QuestionnaireTemplate). The **M49 country code** must be in cell A2 of the first sheet of the Excel file (without leading zeros until further notice), product codes must follow the **CPC** classification, and the **currency must be properly reported** so that the harvester can detect any change in the currency during the period covered by the questionnaire.
+
+```{r  QuestionnaireTemplate, echo=FALSE, out.width="100%", fig.cap='Questionnaire template, Excel sheet 1.'}
+knitr::include_graphics("img/QuestionnaireTemplate.png")
+```
+
+The technical unit might perform preliminary checks on data before harvesting questionnaires (e.g. unit of measure consistency).
+Once the questionnaire Excel files are ready to be imported, they should be compressed into a .zip folder to be provided as input for the questionnaire harvester.
+In order to launch the questionnaire through the SWS interface refer to the pictures below (\@ref(fig:PPharv1) - \@ref(fig:PPharv4))
+The first step is to click on the ‘Harvester’ button and select the harvester to run: ‘Producer Prices Annual Questionnaire Harvester’ or 'Producer Prices Monthly Questionnaire Harvester' (figures \@ref(fig:PPharv2) - \@ref(fig:PPharv2)).
+
+```{r  PPharv1, echo=FALSE, out.width="100%", fig.cap='Select the harvester button to see the list of available harvester.'}
+knitr::include_graphics("img/PP1.png")
+```
+
+
+```{r  PPharv2, echo=FALSE, out.width="100%", fig.cap='Select the harvester to launch.'}
+knitr::include_graphics("img/PP2.png")
+```
+
+Once the harvester has been selected, click on the 'Browse...' button to select the .zip file containing the questionnaires, click on the ‘Launch job’ button and wait for the confirmation email reporting the successful completion of the harvester or problems that have been encountered. Should you have any problem with the harvester routine please contact CSI division (Enrico Anello initially developed the harvester).
+
+```{r  PPharv3, echo=FALSE, out.width="100%", fig.cap='Select the .zip file containing questionnaire files.'}
+knitr::include_graphics("img/PP3.png")
+```
+
+
+```{r  PPharv4, echo=FALSE, out.width="100%", fig.cap='Launch the harvester.'}
+knitr::include_graphics("img/PP4.png")
+```
+
+The data from the questionnaire are saved into the 'Annual Producer Prices (Questionnaire)' dataset (\@ref(fig:QuestWF)). Data expressed in Local currency unit (LCU) are saved with the flag combination (;q) or (B;q) in case there is a change in the currency and, hence, a break in the series. Please note this last step will be important for the calculation of the standard local currency (SLC) in the following steps so it is important that **questionnaires report the actual currency in which prices are provided**.
+
+```{r  QuestWF, echo=FALSE, out.width="100%", fig.cap='Questionnaire harvester workflow.'}
+knitr::include_graphics("img/QuestWF.jpg")
+```
+
+
+## Transfer and convert LCU questionnaire data in SLC and USD  (Plugin: pp_fromQuest2Prep) {#fromQuest2Prep}
+
+The data stored in the questionnaire dataset undergo no transformation, they are imported only in LCU. The conversion both in SLC and USD takes place running the '**pp_fromQuest2Prep**' plugin.
+
+The plugin can be run from a session of the **Annual Producer Prices (Preparation)** dataset as shown in figure \@ref(fig:runplugin11). Select the 'pp_fromQuest2Prep' plugin from the menu (figure \@ref(fig:runplugin12)) and insert the parameters to run the plugin as in figure \@ref(fig:runplugin13).
+The three parameters to insert are the questionnaire start and end years, i.e. the years included in the last questionnaire round, and the countries the plugin must run for. If no country code is inserted the plugin will apply to all countries. Please note, to apply the plugin only to _specific countries the values inserted must be the M49 country codes_.
+
+
+```{r  runplugin11, echo=FALSE, out.width="100%", fig.cap='Run plugin from Preparation dataset session.'}
+knitr::include_graphics("img/runplugin11.png")
+```
+
+
+```{r  runplugin12, echo=FALSE, out.width="100%", fig.cap='Choose the plugin to run.'}
+knitr::include_graphics("img/runplugin12.png")
+```
+
+
+```{r  runplugin13, echo=FALSE, out.width="100%", fig.cap='Insert required parameters and run the plugin. As an example the plugin refers to 2020 questionnaire round where data from 2017 to 2019 were asked to countries. The two selected countries for this example are France (250) and Italy (380)'}
+knitr::include_graphics("img/runplugin13.png")
+```
+
+Once the plugin starts, the operations performed are:
+
+1. The plugin pulls input data from: the questionnaire dataset, the exchange rates dataset and the '*lcu_2_m49*' datatable to link country and currency.
+The exchange rates dataset contains exchange rates in the form 'domestic currency per USD' so that, once the two datasets are merged, the price in USD is 
+$$USD = LCU/ExchangeRate $$
+
+2. With respect to the SLC value, if there has been no change in the currency used by the country during the last year included in the questionnaire, the SLC value is just equal to the LCU value. If, on the contrary, there has been a change in currency, i.e. there is an observation flag 'B', then all the SLC series is adapted to the new currency, including the validated data of the previous years. The convertion is performed using the '*currency_changes*' datatable. Note that the update of the datatables is responsibility of the technical unit.
+3. After these calculations and checks, the plugins compares validated data with the new data. Currently there is a tolerance level variation of 10%, if the variation is above this threshold the values are inserted into the datatable 'revisions2control' to be manually checked and then re-imported into the dataset.
+The absolute value of the variation is checked as it follows: 
+$$|(P_{t-1} - P_{t})/P_{t}| > 0.1 $$
+where _t_ refers to the year of the review of the figure.
+By default the new value is retained and saved into the *preparation dataset*, but there is the option to change and restore the previous value through the '*revisions2control*' datatable \@ref(pp_refuse_update). 
+The data calculated by the plugin are saved into the **Annual Producer Prices (Preparation)** dataset.
+
+
+### Plugin code
+
+Below is reported the code for the '*pp_fromQuest2Prep*' plugin.
+Please note most of the code is commented in order to clarify the steps of the routine.
+
+```
+#-- Load Packages ----
+
+suppressMessages({
+  library(data.table)
+  library(DT)
+  library(forecast)
+  library(tseries)
+  library(faosws)
+  library(faoswsFlag)
+  library(faoswsProcessing)
+  library(faoswsUtil)
+  library(faoswsImputation)
+  library(sendmailR)
+})
+
+#-- Token QA ----
+
+if(CheckDebug()){
+  library(faoswsModules)
+  SETTINGS = ReadSettings("sws.yml")
+  R_SWS_SHARE_PATH = SETTINGS[["share"]]
+  SetClientFiles(SETTINGS[["certdir"]])
+  GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                     token = '4e9d9a2e-5258-48b6-974f-3656d1af8217')
+}
+
+#-- Parameters ----
+
+domainPP <- 'prod_prices'
+datasetVal <- 'annual_producer_prices_validated'
+datasetPrep <- 'annual_producer_prices_prep'
+datasetQuest <- 'annual_producer_prices_quest'
+LCUcode <- '5530'
+
+countryPar <-  swsContext.computationParams$countries
+print(countryPar)
+if(!is.null(countryPar) & length(countryPar) > 0){
+  countryPar <- swsContext.computationParams$countries
+  sessionCountry <- strsplit(countryPar, ', ')[[1]]
+} else {
+  sessionCountry <- swsContext.datasets[[1]]@dimensions$geographicAreaM49@keys
+  countries <- GetCodeList(domainPP, datasetPrep, "geographicAreaM49")[ type == 'country']$code
+  # Make sure only countries not areas
+  sessionCountry <- sessionCountry[sessionCountry %in% countries]
+}
+message(paste("Prod Prices: countries selected ", paste0(sessionCountry, collapse = ', '), '.', sep = ''))
+
+# Mandatory year values.
+maxyear <- as.numeric(swsContext.computationParams$maxyear)
+minyear <- as.numeric(swsContext.computationParams$minyear)
+selectedYears <- as.character(minyear:maxyear)
+
+#-- Pull questionnaire data ----
+
+priceKey = DatasetKey(
+  domain = domainPP,
+  dataset = datasetQuest,
+  dimensions = list(
+    Dimension(name = "geographicAreaM49",
+              keys = GetCodeList(domainPP, datasetQuest, 'geographicAreaM49')[code %in% sessionCountry, code]),
+    Dimension(name = "measuredElement", 
+              keys = GetCodeList(domainPP, datasetQuest, 'measuredElement')[ code == LCUcode, code]),
+    Dimension(name = "measuredItemCPC",
+              keys = GetCodeList(domainPP, datasetQuest, 'measuredItemCPC')[, code]),
+    Dimension(name = "timePointYears", 
+              keys = GetCodeList(domainPP, datasetQuest, 'timePointYears')[code %in% selectedYears, code]))
+  
+)
+
+
+priceData <- GetData(priceKey, flags = TRUE)
+
+
+#-- USD conversion ----
+
+# Get country-currency datatatble ADD withdraw year/effective change in series
+lcu_2_m49 <- ReadDatatable('lcu_2_m49')
+lcu_2_m49[start_year_iso == '', start_year_iso := '1900']
+lcu_2_m49[end_year_iso == '', end_year_iso := '9999']
+
+# Pull exchange rates dataset
+
+erKey = DatasetKey(
+  domain = 'common',
+  dataset = 'exchange_rates_annual',
+  dimensions = list(
+    Dimension(name = 'geographicAreaM49',
+              keys = GetCodeList('common', 'exchange_rates_annual', 'geographicAreaM49')[code %in% sessionCountry, code]),
+    Dimension(name = "from_currency",
+              keys = GetCodeList('common', 'exchange_rates_annual', 'from_currency')[code != 'ECU' & endDate >= '1991-01-01' | 
+                                                                                       is.na(endDate), code]),
+    Dimension(name = "to_currency", 
+              keys = GetCodeList('common', 'exchange_rates_annual', 'to_currency')[code == 'USD', code]),
+    Dimension(name = 'measuredElement',
+              keys = 'LCU'),
+    Dimension(name = "timePointYears", 
+              keys = GetCodeList('common', 'exchange_rates_annual', 'timePointYears')[code %in% selectedYears, code]))
+  
+)
+
+erdt <- GetData(erKey, flags = F) 
+
+erdt[,c('measuredElement', 'to_currency')] <- NULL
+
+# check on currency
+if(!all(erdt$from_currency %in% lcu_2_m49$code_iso)){
+  stop(paste('Missing countey-currency correspondence: ', 
+             unique(erdt[!from_currency %in% lcu_2_m49$code_iso]$from_currency),
+             'not in the lcu_2_m49 datatble. Please update it.'))
+}
+
+# Start conversion into USD and SLC merging with XR
+pper0 <- merge(priceData, erdt, by = c('geographicAreaM49', 'timePointYears'), all.x = T,
+               suffixes = c('', '_er'))
+
+if(nrow(pper0[is.na(Value_er)]) >0){
+  misscountry <- unique(pper0[is.na(Value_er)]$geographicAreaM49)
+  message(paste('Missing exchange rate for: ', misscountry, sep = ''))
+}
+
+pper0[, ValueUSD := Value / Value_er]
+pper0[, ValueSLC := Value]
+
+pper0[, c("Value_er")] <- NULL
+
+# get appropriate shape and flags (USD and SLC calculated, 'i')
+pper <- melt(pper0, measure.vars = c('Value', 'ValueUSD', 'ValueSLC'),
+             value.name = 'Value')
+pper[variable == 'ValueUSD', c('measuredElement', 
+                               'flagMethod') := list('5532', 'i')]
+pper[variable == 'ValueSLC', c('measuredElement', 
+                               'flagMethod') := list('5531', 'i')]
+pper[ , c('variable')] <- NULL
+
+#-- Get Validated dataset ----
+
+valpriceKey = DatasetKey(
+  domain = domainPP,
+  dataset = datasetVal,
+  dimensions = list(
+    Dimension(name = "geographicAreaM49",
+              keys = GetCodeList(domainPP, datasetVal, 'geographicAreaM49')[code %in% unique(priceData$geographicAreaM49), code]),
+    Dimension(name = "measuredElement", 
+              keys = GetCodeList(domainPP, datasetVal, 'measuredElement')[code %in% c('5530', '5531', '5532'), code]),
+    Dimension(name = "measuredItemCPC",
+              keys = GetCodeList(domainPP, datasetVal, 'measuredItemCPC')[, code]),
+    Dimension(name = "timePointYears", 
+              keys = GetCodeList(domainPP, datasetVal, 'timePointYears')[, code]))
+  
+)
+
+val_price <- GetData(valpriceKey, flags = TRUE)
+setnames(val_price, 'flag_obs_status_v2', 'flagObservationStatus')
+
+if(any(pper[timePointYears == maxyear]$flagObservationStatus == 'B')){
+  
+  geotimecomb <- unique(pper[flagObservationStatus == 'B', .(geographicAreaM49, timePointYears, from_currency)])
+  
+  # Get datatable with conversion rates 
+  # If change of currency (the datatable has to be updated)
+  conv_rates <- ReadDatatable('currency_changes')
+  
+  conv_rates_needed <- merge(conv_rates, geotimecomb, by.x  = 'new_currency_code',
+                             by.y = 'from_currency')
+  
+  slcval <- merge(val_price, conv_rates_needed, by = 'geographicAreaM49', 
+                  all.x = T, suffixes = c('', '_change'))
+  
+  slcval[measuredElement == '5531' & timePointYears < timePointYears_change, c('Value',
+                                                                               'flagObservationStatus', 
+                                                                               'flagMethod'):= list(Value/exchange_rate,
+                                                                                                    flagObservationStatus,
+                                                                                                    'i')]
+  names(slcval)
+  slcval[ , c("new_currency_code",    
+              "old_currency_code",
+              "exchange_rate",
+              "timePointYears_change")] <- NULL
+  
+  slcquest <- merge(pper, conv_rates_needed,  by = 'geographicAreaM49',
+                    all.x = T, suffixes = c('', '_change'))
+  
+  slcquest[measuredElement == '5531' & timePointYears < timePointYears_change, c('Value',
+                                                                                 'flagObservationStatus', 
+                                                                                 'flagMethod'):= list(Value/exchange_rate,
+                                                                                                      flagObservationStatus,
+                                                                                                      'i')]
+  slcquest[ , c("new_currency_code",    
+                "old_currency_code",
+                "exchange_rate",
+                "timePointYears_change")] <- NULL
+  
+  
+  
+} else {
+  slcval <- val_price
+  slcquest <- pper
+}
+
+#-- Merge QUEST and VAL ----
+
+pptot <- merge(slcquest, slcval, by = c('geographicAreaM49', 
+                                        'timePointYears',
+                                        'measuredElement',
+                                        'measuredItemCPC'),
+               suffixes = c('', '_old'), all = T)
+
+pptot[!is.na(Value_old) & is.na(Value), c('Value',
+                                          'flagObservationStatus', 
+                                          'flagMethod') := list(Value_old, 
+                                                                flagObservationStatus_old,
+                                                                flagMethod_old)]
+
+pptot[!is.na(Value_old) & !is.na(Value), diff := (Value_old - Value)/Value]
+
+pptot[ , names(pptot)[grepl('_old', names(pptot))]] <- NULL  
+
+difference_tolerance <- 0.1
+revisions2control <- pptot[abs(diff) > difference_tolerance & !is.na(diff)]
+revisions2control[, substitute := FALSE]
+names(revisions2control) <- tolower(names(revisions2control))
+
+if(nrow(revisions2control) > 0){
+  r2c <- ReadDatatable('revisions2control', readOnly = F)
+  changeset <- Changeset('revisions2control')
+  AddDeletions(changeset, r2c[geographicaream49 %in% unique(pptot$geographicAreaM49)])
+  Finalise(changeset)
+  changeset <- Changeset('revisions2control')
+  AddInsertions(changeset, revisions2control)
+  Finalize(changeset)
+}
+
+pptot[,diff:= NULL]
+#-- Outlier detection ----
+
+ppout <- copy(pptot)
+ppout[ , LogValue := log(Value)]
+ppout[measuredElement == '5531' , 
+      var := diff(c(NA, LogValue))/shift(LogValue), 
+      by = c("geographicAreaM49",
+             "measuredElement",
+             "measuredItemCPC")]
+#-- Manual outlier ----
+ppout[measuredElement == '5531', 
+      quart1 := quantile(var, 0.25, na.rm = T),
+      by = c("geographicAreaM49",
+             "measuredElement",
+             "measuredItemCPC")]
+ppout[measuredElement == '5531', 
+      quart3 := quantile(var, 0.75, na.rm = T),
+      by = c("geographicAreaM49",
+             "measuredElement",
+             "measuredItemCPC")]
+
+ppout[measuredElement == '5531', lower := quart1 - (1.5*(quart3-quart1))]
+ppout[measuredElement == '5531', upper := quart3 + (1.5*(quart3-quart1))]
+
+ppout[, outlier2 := FALSE]
+ppout[var > upper | var < lower  , outlier2 := TRUE,
+      by = c("geographicAreaM49",
+             "measuredElement",
+             "measuredItemCPC")]
+ppout[!timePointYears %in% selectedYears, outlier2 := FALSE]
+
+#-- tsclean ----
+ppnew <- copy(pptot)
+ppnew <- ppnew[order(timePointYears)]
+ppnew[,LogValue := log(Value)]
+ppnew[!is.na(LogValue) & measuredElement == '5531', 
+      c('LogValue_clean',
+        'flagObservationStatus_clean',
+        'flagMethod_clean'):= list(tsclean(ts(LogValue), replace.missing = FALSE),
+                                   flagObservationStatus, flagMethod),
+      by = c("geographicAreaM49",
+             "measuredElement", 'measuredItemCPC')] # use tsclean for missing values and outliers. 
+
+ppnew$LogValue_clean <- as.vector(ppnew$LogValue_clean)
+ppnew$LogValue <- as.vector(ppnew$LogValue)
+ppnew[ , Value_clean := exp(LogValue_clean)]
+
+ppnew[, diff := (LogValue_clean - LogValue)/LogValue]
+ppnew[timePointYears >= min(slcquest$timePointYears) & LogValue != LogValue_clean, 
+      c('flagObservationStatus_clean',
+        'flagMethod_clean'):= list('E', 'e')]
+
+
+outliers <- rbind(ppnew[flagObservationStatus_clean == 'E' & flagMethod == 'e'], 
+                  ppout[timePointYears %in% selectedYears & outlier2 == TRUE], fill = T)
+outliers <- unique(outliers[ , names(pptot), with = F])
+
+# NOW (out;e) as there are other (E;e)
+pptot[ outliers, c('flagObservationStatus', 'flagMethod') := list('E','e'),
+       on = c('geographicAreaM49', 'timePointYears', 'measuredItemCPC')]
+
+#-- comparison with mean monthly data could be included ----
+
+#-- Data Saving ----
+SaveData(domainPP, datasetPrep, pptot)
+
+# then the shiny gives outliers (E,e) to revise manually 
+# data are then saved into the preparation dataset along with 
+# elements 5530 and 5532 (LCU and USD)
+
+#-- send Email with notification of correct execution ----
+
+from = "sws@fao.org"
+to = swsContext.userEmail
+subject = "The plug-in has correctly run"
+body = paste('Number fo revised values: ', nrow(revisions2control), '. Number of outlier detected: ', nrow(outliers), sep = '')
+sendmailR::sendmail(from = from, to = to, subject = subject, msg = body)
+paste0("Email sent to ", swsContext.userEmail)
+
+```
+
+## Refuse questionnaire update (Plugin: pp_refuse_update) {#pp_refuse_update}
+
+This plugin follows a manual check of the datatable '*revisions2control*'. This datatable contains all questionnaire data that considerably differ from the validated data (see paragraph \@ref(fromQuest2Prep) for more details). The user can therefore compare the two values (new and validated one) and, if for any of them the revision has to be rejected, check the box in the last column '*refuse_update*' see figure \@ref(fig:refuserev).
+
+```{r  refuserev, echo=FALSE, out.width="100%", fig.cap='Example of refused value update.'}
+knitr::include_graphics("img/refuserev.png")
+```
+
+Once values have been revised the user can run the plugin from the *preparation dataset* and save changes through the 'Save to dataset' button (\@ref(fig:refuserevplugin)).
+
+```{r  refuserevplugin, echo=FALSE, out.width="100%", fig.cap='Run plugin to restore validated figure over new questionnaire ones.'}
+knitr::include_graphics("img/refuserevplugin.png")
+```
+
+### Plugin code
+
+This plugin simply selects the lines of the datatables for which the update has been refused and save it back to the *preparation dataset* with the same steps of the *pp_Quest2Prep* plugin to convert the LCU in SLC and USD.
+
+```
+# -- Load Packages ----
+
+suppressMessages({
+  library(data.table)
+  library(DT)
+  library(forecast)
+  library(tseries)
+  library(faosws)
+  library(faoswsFlag)
+  library(faoswsProcessing)
+  library(faoswsUtil)
+  library(faoswsImputation)
+  library(imputeTS)
+  library(ggplot2)
+  library(sendmailR)
+})
+
+# -- Token QA ----
+
+if(CheckDebug()){
+  library(faoswsModules)
+  SETTINGS = ReadSettings("sws.yml")
+  R_SWS_SHARE_PATH = SETTINGS[["share"]]
+  SetClientFiles(SETTINGS[["certdir"]])
+  GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                     token = '4c304ada-522c-4110-bac6-34a3bc0703e8')  #SETTINGS[["token"]])#'4e9d9a2e-5258-48b6-974f-3656d1af8217')
+}
+
+domainPP <- 'prod_prices'
+datasetPrep <- 'annual_producer_prices_prep' 
+
+revision0 <- ReadDatatable('revisions2control')
+revision0[ , `:=` (value = as.numeric(value), value_old = as.numeric(value_old))]
+# Take only what has not to be overwritten
+revision <- revision0[refuse_update == TRUE]
+
+if(revision[,.N] > 0){
+ 
+revision[,c("value", "flagobservationstatus", "flagmethod") := NULL]
+setnames(revision, c("geographicaream49", "measuredelement", "measureditemcpc", "timepointyears", 
+                     "value_old", "flagobservationstatus_old", "flagmethod_old"),
+         c("geographicAreaM49", "measuredElement", "measuredItemCPC", "timePointYears", 
+           "Value", "flagObservationStatus", "flagMethod"))
+
+  #-- USD conversion ----
+  
+  # Get country-currency datatatble ADD withdraw year/effective change in series
+  lcu_2_m49 <- ReadDatatable('lcu_2_m49')
+  lcu_2_m49[start_year_iso == '', start_year_iso := '1900']
+  lcu_2_m49[end_year_iso == '', end_year_iso := '9999']
+  
+  # Pull exchange rates dataset
+  
+  erKey = DatasetKey(
+    domain = 'common',
+    dataset = 'exchange_rates_annual',
+    dimensions = list(
+      Dimension(name = 'geographicAreaM49',
+                keys = GetCodeList('common', 'exchange_rates_annual', 'geographicAreaM49')[code %in% sessionCountry, code]),
+      Dimension(name = "from_currency",
+                keys = GetCodeList('common', 'exchange_rates_annual', 'from_currency')[code != 'ECU' & endDate >= '1991-01-01' | 
+                                                                                         is.na(endDate), code]),
+      Dimension(name = "to_currency", 
+                keys = GetCodeList('common', 'exchange_rates_annual', 'to_currency')[code == 'USD', code]),
+      Dimension(name = 'measuredElement',
+                keys = 'LCU'),
+      Dimension(name = "timePointYears", 
+                keys = GetCodeList('common', 'exchange_rates_annual', 'timePointYears')[code %in% selectedYears, code]))
+    
+  )
+  
+  erdt <- GetData(erKey, flags = F) 
+  
+  erdt[,c('measuredElement', 'to_currency')] <- NULL
+  
+  # check on currency
+  if(!all(erdt$from_currency %in% lcu_2_m49$code_iso)){
+    stop(paste('Missing countey-currency correspondence: ', 
+               unique(erdt[!from_currency %in% lcu_2_m49$code_iso]$from_currency),
+               'not in the lcu_2_m49 datatble. Please update it.'))
+  }
+  
+  # Start conversion into USD and SLC merging with XR
+  pper0 <- merge(revision, erdt, by = c('geographicAreaM49', 'timePointYears'), all.x = T,
+                 suffixes = c('', '_er'))
+  
+  if(nrow(pper0[is.na(Value_er)]) >0){
+    misscountry <- unique(pper0[is.na(Value_er)]$geographicAreaM49)
+    message(paste('Missing exchange rate for: ', misscountry, sep = ''))
+  }
+  
+  pper0[, ValueUSD := Value / Value_er]
+  pper0[, ValueSLC := Value]
+  
+  pper0[, c("Value_er")] <- NULL
+  
+  # get appropriate shape and flags (USD and SLC calculated, 'i')
+  pper <- melt(pper0, measure.vars = c('Value', 'ValueUSD', 'ValueSLC'),
+               value.name = 'Value')
+  pper[variable == 'ValueUSD', c('measuredElement', 
+                                 'flagMethod') := list('5532', 'i')]
+  pper[variable == 'ValueSLC', c('measuredElement', 
+                                 'flagMethod') := list('5531', 'i')]
+  pper[ , c('variable')] <- NULL
+  
+  #-- Get Validated dataset ----
+  
+  valpriceKey = DatasetKey(
+    domain = domainPP,
+    dataset = datasetPrep,
+    dimensions = list(
+      Dimension(name = "geographicAreaM49",
+                keys = GetCodeList(domainPP, datasetPrep, 'geographicAreaM49')[code %in% unique(revision$geographicAreaM49), code]),
+      Dimension(name = "measuredElement", 
+                keys = GetCodeList(domainPP, datasetPrep, 'measuredElement')[code %in% c('5530', '5531', '5532'), code]),
+      Dimension(name = "measuredItemCPC",
+                keys = GetCodeList(domainPP, datasetPrep, 'measuredItemCPC')[code %in% unique(revision$measuredItemCPC), code]),
+      Dimension(name = "timePointYears", 
+                keys = GetCodeList(domainPP, datasetPrep, 'timePointYears')[code >= min(pper$timePointYears), code]))
+    
+  )
+  
+  val_price <- GetData(valpriceKey, flags = TRUE)
+  
+  if(any(val_price[timePointYears == maxyear]$flagObservationStatus == 'B')){
+    
+    geotimecomb <- unique(val_price[flagObservationStatus == 'B', .(geographicAreaM49, timePointYears)])
+    geotimecomb <- merge(geotimecomb, lcu_2_m49[,.(code_m49, code_iso)], 
+                         by.x = 'geographicAreaM49', by.y = 'code_m49')
+    # Get datatable with conversion rates 
+    # If change of currency (the datatable has to be updated)
+    conv_rates <- ReadDatatable('currency_changes')
+    
+    conv_rates_needed <- merge(conv_rates, geotimecomb, by.x  = 'new_currency_code',
+                               by.y = 'code_iso')
+    
+    slcquest <- merge(pper, conv_rates_needed,  by = 'geographicAreaM49',
+                      all.x = T, suffixes = c('', '_change'))
+    
+    slcquest[measuredElement == '5531' & timePointYears < timePointYears_change, c('Value',
+                                                                                   'flagObservationStatus', 
+                                                                                   'flagMethod'):= list(Value/exchange_rate,
+                                                                                                        flagObservationStatus,
+                                                                                                        'i')]
+    slcquest <- slcquest[ , .(geographicAreaM49,
+                              timePointYears,
+                              measuredElement,
+                              measuredItemCPC,
+                              Value, 
+                              flagObservationStatus,
+                              flagMethod)]
+    
+  } else {
+    slcquest <- pper
+  }
+  
+
+
+SaveData(domain = 'prod_prices', dataset = 'annual_producer_prices_validation', data = slcquest,
+         metadata = includemetadata, waitTimeout = Inf)
+}
+
+from = "sws@fao.org"
+to = swsContext.userEmail
+subject = "PP revision plug-in has correctly run"
+body = list('The plugin has correctly run. Please save the data to the Producer prices preparation dataset.')
+sendmailR::sendmail(from = from, to = to, subject = subject, msg = body)
+paste0("Email sent to ", swsContext.userEmail)
+
+
+```
+
+
+## Outlier detection (Plugin: pp_OutlierDetection) {#pp_OutlierDetection}
+
+After the data have been transferred from the Questionnaire to the Preparation dataset, the outlier detection plugin can run. It identifies the outlier of the last questionnaire year applying three different methods:
+
+1. interquartile range (IQR) method on the price level: let **Q1** and **Q3** be the value corresponding respectively to the first and third quartile of the price series, the IQR method identifies as outlier all values lower than **Q1 - 1.5x(Q3-Q1)** or higher than **Q3 + 1.5x(Q3-Q1)**.
+
+2. interquartile range (IQR) method on price variation: the same mehtod of point 1 is applied but now the price variation series is considered.
+
+3. ‘tsclean’ function built-in in R that applies the _supsmu_ method, i.e. the Friedman's ‘super smoother’, a running lines smoother which chooses between three spans for the lines. The running lines smoothers are symmetric, with k/2data points each side of the predicted point, and values of k as 0.5 * n, 0.2 * n and 0.05 * n, where n is the number of data points. If span is specified, a single smoother with span span * n is used. The best of the three smoothers is chosen by cross-validation for each prediction. The best spans are then smoothed by a running lines smoother and the final prediction chosen by linear interpolation. The FORTRAN code says: “For small samples (n < 40) or if there are substantial serial correlations between observations close in x-value, then a pre-specified fixed span smoother (span > 0) should be used. Reasonable span values are 0.2 to 0.4.” Cases with non-finite values are dropped.
+
+For method 2 and 3, outlier detection is performed on the **SLC logarithmic series**, for method 1 the SLC price series is considered.
+Identified outliers according to the three methods are compared. If two or all three method identified a point as outlier, this point is flagged as outlier (E;e) and can be reviewed in the shiny application before proceeding to the missing data imputation.
+The flag of figures identified as outliers are saved into the **Annual Producer Prices (Preparation)** dataset.
+
+
+```{r  outlier1, echo=FALSE, out.width="100%", fig.cap='First step of the outlier plugin.'}
+knitr::include_graphics("img/OutlierPlugin.jpg")
+```
+
+```{r  outlier2, echo=FALSE, out.width="100%", fig.cap='Second step of the outlier plugin.'}
+knitr::include_graphics("img/OutlierPlugin1.jpg")
+```
+
+
+
+
+
+## Shiny application: outlier validation
+
+After the review of the initial data coming from the questionnaire, the user must validate the output of the plugin **pp_OutlierDetection**. This validation step takes place in a *shiny application* that can be found at the url http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/. The application is also an essential tool for the imputation validation step and for the series revision that will be explained in the following chapters.
+
+To check the detected outlier and possibly modify them, the user has to retrieve a token from the Preparation dataset session. The token is essential for the shiny to connect to the SWS and session and be able to overwrite data in a session. The token is obtained selecting the plugin 'Get_token' and selecting the button 'Get debug token' at the bottom right part of the pop-up screen \@ref(fig:gettoken1).
+
+```{r  gettoken1, echo=FALSE, out.width="100%", fig.cap='Creation of session token.'}
+knitr::include_graphics("img/gettoken1.png")
+```
+
+Once the token is displayed on the screen (Figure \@ref(fig:gettoken2)), the user should copy it and paste it in the appropriate shiny box \ref(fig:shinyout1).
+
+```{r  gettoken2, echo=FALSE, out.width="100%", fig.cap='Initial screen of the shiny application.'}
+knitr::include_graphics("img/gettoken2.png")
+```
+
+```{r  shinyout1, echo=FALSE, out.width="100%", fig.cap='First step to create a session token.'}
+knitr::include_graphics("img/shinyout1.png")
+```
+
+After inserting the token, the user can select the country and the year of the last questionnaire so that the shiny provides outlier (if any) detected by the plugin for the country.
+The user checks the detected outlier and either classify it as 'Normal' figure or as an 'Outlier' \@ref(fig:shinyout2).
+
+```{r  shinyout2, echo=FALSE, out.width="100%", fig.cap='Screen of the shiny app for a selected outlier commodity to review.'}
+knitr::include_graphics("img/shinyout2.png")
+```
+
+Figure \@ref(fig:shinyout3) highlights:
+- the additional information provided to the user to assess the detected outlier: price value and variation for all commodities in the selected country but also prices of the selected commodity in other countries sortable by several variables (region, sub-region, year, currency type).
+
+- the box dedicated to replace the detected outlier with a manual estimate. This box only appears once the user classified the figure as outlier. If the 'Manual input' box is left blank the outlier will be imputed by the plugin later on. Otherwise, the manual input will replace the detected outlier. 
+
+```{r  shinyout3, echo=FALSE, out.width="100%", fig.cap='Shiny app outlier review additional information and outlier manual value insertion.'}
+knitr::include_graphics("img/shinyout3.png")
+```

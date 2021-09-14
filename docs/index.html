@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Producer prices compilation into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Migration of Producer prices compilation into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Migration of Producer prices compilation into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2021-09-14">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+
+<link rel="next" href="Harvester.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a><ul>
+<li><a href="index.html#migration-actors"><strong>Migration actors</strong></a></li>
+<li><a href="index.html#new-methodology"><strong>New methodology</strong></a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Producer prices (based on previous documents) and SWS introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#producer-prices-workflow"><i class="fa fa-check"></i>Producer prices: workflow</a></li>
+</ul></li>
+<li><a href="index.html#sws-resources"><strong>SWS resources</strong></a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-lists"><i class="fa fa-check"></i>Code lists</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#data-tables"><i class="fa fa-check"></i>Data tables</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#datasets"><i class="fa fa-check"></i>Datasets</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#elements-description"><i class="fa fa-check"></i>Elements description</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#flag-conversion"><i class="fa fa-check"></i>Flag conversion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="Harvester.html"><a href="Harvester.html"><i class="fa fa-check"></i><b>1</b> <strong>Harvester procedure and initial plugins</strong></a></li>
+<li class="chapter" data-level="2" data-path="Imputation.html"><a href="Imputation.html"><i class="fa fa-check"></i><b>2</b> <strong>Imputation plugin and validation</strong></a></li>
+<li class="chapter" data-level="3" data-path="ShinyDes.html"><a href="ShinyDes.html"><i class="fa fa-check"></i><b>3</b> <strong>Producer prices Produce Price Indices and Purchasing Power Parities</strong></a></li>
+<li class="chapter" data-level="4" data-path="ShinyCode.html"><a href="ShinyCode.html"><i class="fa fa-check"></i><b>4</b> <strong>The Producer prices validation Shiny R code</strong></a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Producer prices compilation into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Migration of Producer prices compilation into the SWS</h1>
+<h4 class="author"><em>Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)</em></h4>
+<h4 class="date"><em>2021-09-14</em></h4>
+</div>
+<div id="introduction" class="section level1 unnumbered">
+<h1><strong>Introduction</strong></h1>
+<p>The Economic team of the Statistical division (ESSD ECO team) is migrating its statistical processes into the Corporate Statistical Working System (SWS). This online book documents the significant steps that have been taken for this migration. The document describes the main institutional actors involved in the migration as well as the supporting objects (<strong>code lists</strong>, <strong>datasets</strong>, <strong>data tables</strong>) that have been created to support the SWS plugins (R modules) to meet technical unit requirements. Furthermore, the SWS plugins and Shiny applications are presented in the form of chapters providing a detailed description of their workflows as well as results.</p>
+<div class="rmdnote">
+<p>
+<strong>IMPORTANT:</strong> Use the <strong>Chrome browser</strong> to have a correct visualization of HTML outputs in this online document.
+</p>
+</div>
+<div id="migration-actors" class="section level2 unnumbered">
+<h2><strong>Migration actors</strong></h2>
+<p>Any migration into the SWS requires the interaction between at least three actors:</p>
+<ol style="list-style-type: decimal">
+<li>The <strong>technical unit</strong> interested in automating either some or all its analytic processes in the SWS. The technical unit can be treated as client demanding services from the counterparts responsible for the implementation of its data and statistical assets in the SWS. Therefore, a successful migration depends on the coordination between the technical division and other parts. In this migration framework the technical unit is the ECO team and is represented by:</li>
+</ol>
+<ul>
+<li><strong>Piero Conforti</strong> <em>Senior Statistician and team leader, ESSD</em></li>
+<li><strong>Jean Maire Munyeshyaka</strong> <em>Statistician, ESSD</em></li>
+<li><strong>Michele Vollaro</strong> <em>Economist and statistician, ESSD</em></li>
+<li><strong>Claudio Valeri</strong> <em>Statistical clerk, ESSD</em></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>The <strong>ESS - Methodological Innovation Team</strong> (ESS - SWS) responsible for the implementation and documentation of the required statistical processes. From the ESS - SWS team the focal points for FIAS - SWS process migration are:</li>
+</ol>
+<ul>
+<li><strong>Carola Fabi</strong> <em>Senior Statistician and team leader (ESSD)</em></li>
+<li><strong>Charlotte Taglioni</strong> <em>Statistician (ESSD)</em></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>The <strong>CSI - SWS</strong> the <strong>primary backend and frontend maintainer of the SWS</strong> and responsible for the implementation and documentation of non-statistical processes (IT infrastructure). The CIO - SWS team have as interlocutors:</li>
+</ol>
+<ul>
+<li><strong>John Rowell</strong> <em>Information Technology Officer (CSI)</em></li>
+<li><strong>Enrico Anello</strong> <em>Full Stack Developer (CSI)</em></li>
+<li><strong>Matteo Terrinoni</strong> <em>Lead Front End developer (CSI)</em></li>
+</ul>
+</div>
+<div id="new-methodology" class="section level2 unnumbered">
+<h2><strong>New methodology</strong></h2>
+<p>This document aims to provide a detailed description of the new processes of collection, processing, analysis and dissemination of producer price data in FAOSTAT. The underlying objective is to provide both technical and practical material for in-house (ESS) orientation and training on the Producer Prices domain. The book focuses on SWS statistical processes and on the new methodology prepared by Michele Vollaro that can be found along with the old one in the <a href="https://unfao.sharepoint.com/sites/tssws/Shared%20Documents/Forms/AllItems.aspx?viewid=07492829%2Dae8e%2D4338%2Dbc40%2D97411da985e8&amp;id=%2Fsites%2Ftssws%2FShared%20Documents%2F03%2E%20Statistical%20Documentation%2F02%2E%20Statistical%20Processes%2F04%2E%20ESS%20%E2%80%93%20Agriculture%20Producer%20Prices%20and%20Price%20Indices">shared folder</a> of the SWS.</p>
+</div>
+<div id="producer-prices-based-on-previous-documents-and-sws-introduction" class="section level2 unnumbered">
+<h2>Producer prices (based on previous documents) and SWS introduction</h2>
+<p>Information on producer prices is of great significance to policy makers and analysts. Relative prices are amongst the main determinants of the type and volume of agricultural production and reflect actual and future market conditions. Data on prices serve various uses including assessment of productivity and competitiveness of a commodity or sector and the evaluation of the contribution of various sectors to the economy and assessing food security. In this respect, producer price information is essential as it is used to value the production quantities recorded in FAOSTAT for the various commodities and countries.</p>
+<p>FAOSTAT provides data on absolute producer prices for crop and livestock products to users through its Price domain. Annual producer prices are available in local currency, standard local currency and US dollars. To date, prices are available from 1991 onwards whilst historical data from 1966 to 1990 are available in the Price Archive section of the Price domain of FAOSTAT in local currency only. Most data originate from country sources received through the FAO questionnaires. In some cases, data are supplemented with official country publications and institutional databases. In addition, where no official data are available, these are complemented by FAO estimates.</p>
+<p>Producer price indices calculated on the basis of absolute prices are also disseminated on an annual basis, as well as monthly producer prices, whose collection started in 2012 and that are available in the Price domain of FAOSTAT from 2010 onwards in local currency only.</p>
+<p>The producer prices refer to prices received by farmers, i.e. prices determined “at the farm gate” or at the first-point-of-sale when farmers participate in their capacity as sellers of their own products. While the aim is to remain as close as possible to this concept, flexibility has to be allowed to given the specificities of each country and commodity markets. Indeed, the choice of appropriate selling points may differ depending on the country and on the marketing structure for each commodity. For example, wholesale prices or even prices at local markets may be appropriate proxies of farm-gate prices when the marketing chain is very limited. On the other hand, in more intermediated markets in which transport and commercial margins constitute a significant share of the commodity price, it is necessary to remain as close as possible to the farm-gate concept.</p>
+<p>A whole range of activities is undertaken by FAO’s Statistics Division before the price data is ready for dissemination to users. The different stages of this work are:</p>
+<ol style="list-style-type: decimal">
+<li>Data Collection</li>
+<li>Data Entry</li>
+<li>Data Processing and Analysis</li>
+<li>Data Dissemination</li>
+</ol>
+<p>Broadly, the process of price compilation begins with questionnaires being sent to FAO members requesting information on prices received by farmers and other supplementary information. The information received from countries is checked on a number of aspects like currency units and units of measurement to ascertain data consistency with past data. The data are then entered into the Statistical Working System (SWS), imputed if data not provided or found missing, and validated through a shiny application. Finally, the validated data are uploaded to the Price domain of FAOSTAT for dissemination to users.</p>
+<p>The Statistical Working System (SWS) is currently the corporate tool to manage all stages of the workflow desribed above.</p>
+<div id="producer-prices-workflow" class="section level3 unnumbered">
+<h3>Producer prices: workflow</h3>
+<p>Figure <a href="index.html#fig:WFpp">.</a> represents the essential points of the overall workflow for processed production data.</p>
+<div class="figure"><span id="fig:WFpp"></span>
+<img src="img/OverallWF.jpg" alt="General workflow." width="100%" />
+<p class="caption">
+Figure .: General workflow.
+</p>
+</div>
+<p>The first part of the workflow is the questionnaire harvester followed by the currency conversion from Local Currency Unit (LCU) to Standard Local Currency (SLC) and US Dollar (USD) along with outlier detection. A manual intervention is then required to validate the detected outliers and to proceed with the missing data imputation and validation. All stages are described in the following paragraphs along with all the objects needed by routines to work properly.</p>
+<p>DESCRIBE BETTER ???</p>
+</div>
+</div>
+<div id="sws-resources" class="section level2 unnumbered">
+<h2><strong>SWS resources</strong></h2>
+<p>SWS resources are R modules, data tables, data sets, and code lists. Data tables are typically used as auxiliary data to help R modules to achieve their goals, often a long-format four-to-six dimensional data set. The statistical domains in SWS, through code/reference lists, define the dimensions of the datasets. Therefore, datasets are primarily used to store code list - referenced values as either input and output in the SWS.</p>
+<div id="code-lists" class="section level3 unnumbered">
+<h3>Code lists</h3>
+<p>Code lists, also called reference lists in SWS parlance, are the dimensions making up the data sets that are designed by the user to store analytic results from SWS modules. Some dimensions are statistical-domain-specific and are defined by the technical unit to reflect its needs regarding data collection, processing, and dissemination while meeting FAO standards. Each data set dimension has a set of codes and their associated descriptions. Thus, code lists serve to the purpose of standardization, visualization, and metadata by associating standardized codes to standardized names in the SWS data set outputs. A typical SWS compliant data set has, therefore, the following dimensions/reference lists:</p>
+<p>Along with the new methodology, also the main standards and classifications used changed to be inline with the Agricultural production data also processed into the SWS. All the datasets and questionnaires are now always using the following classifications:</p>
+<ul>
+<li><p>Country code: Standard country or area codes for statistical use (M49), corresponding to the SWS codelist <em>geographicAreaM49</em>.</p></li>
+<li><p>Product code: Central Product Classification (CPC), corresponding to the SWS codelist <em>measuredItemCPC</em></p></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><strong>Geographic area</strong>. Representing the spatial scale the information is measured at. For example countries, territories, regional aggregates, regional special groups aggregates, global aggregates. In SWS, the geographic area dimension used is named <strong>geographicAreaM49</strong>.</li>
+<li><p><strong>Items</strong>. These one want to take a measurement from. For example, commodities, commodity groups, land use types, species, etc. The ECO team, compliant with other important SWS domains, uses the item code/reference named: <strong>measuredItemCPC</strong>.</p></li>
+<li><p><strong>Elements</strong>. Often representing a measurement that can be taken across different items. For example, area, production, share. In SWS, the element dimension/code list used by ECO team dataset is named <strong>measuredElement</strong> and specifically the subgroup named <em>Output Price</em>.</p></li>
+<li><p><strong>Time</strong> (the time unit the data is displayed for: year, months, etc). In SWS, the time dimension used is named <strong>timePointYears</strong> and <strong>timePointMonths</strong>.</p></li>
+<li><p><strong>Flag</strong> (A standardized label indicating origin and/or nature of a number in the data set, e.g. <blank> (Official number)). In SWS, the flag dimension used is <strong>flagObservationStatus</strong>. Please check the <a href="http://intranet.fao.org/statistics_coordination_portal/standards_for_quality_compliance/">OCS statistical standards</a> and the <a href="http://intranet.fao.org/fileadmin/user_upload/scp/Standards_for_quality_compliance/SSS1_Flags.pdf">flags document</a> to understand the flagObservationStatus rational and obtain the description of flags.</p></li>
+<li><p><strong>Method</strong> (A standardized label indicating method utilized to obtain a number in the data set). In SWS, the method dimension used, combined with the observation flag, is named <strong>flagMethod</strong>. Please check the <a href="http://intranet.fao.org/statistics_coordination_portal/standards_for_quality_compliance/">OCS statistical standards</a> and the <a href="http://intranet.fao.org/fileadmin/user_upload/scp/Standards_for_quality_compliance/SSS1_Flags.pdf">flags document</a> to understand the flagMethod rational and obtain the description of flags.</p></li>
+</ol>
+</div>
+<div id="data-tables" class="section level3 unnumbered">
+<h3>Data tables</h3>
+<p>Data tables are mainly used to store information helping R modules to output analytic results. Information in data tables can be of a number of types and, especially when they are used for mapping purposes, they have to be regularly checked and updated.</p>
+<ul>
+<li><p><strong>currency_changes</strong> (SWS identifier: <code>currency_changes</code>)</p></li>
+<li><p><strong>currency_country_years</strong> (SWS identifier: <code>currency_country_years</code>)</p></li>
+<li><p><strong>currency_dates</strong> (SWS identifier: <code>currency_dates</code>)</p></li>
+<li><p><strong>imputation_annual_prices</strong> (SWS identifier: <code>imputation_annual_prices</code>)</p></li>
+<li><p><strong>interpolation_annual_prices</strong> (SWS identifier: <code>interpolation_annual_prices</code>)</p></li>
+<li><p><strong>lcu_2_m49</strong> (SWS identifier: <code>lcu_2_m49</code>)</p></li>
+<li><p><strong>List of countries - Geary-Khamis</strong> (SWS identifier: <code>country_list_for_gk</code>)</p></li>
+<li><p><strong>List of inputs/outputs for GK</strong> (SWS identifier: <code>input_output_item_gk</code>)</p></li>
+<li><p><strong>List of items - Geary-Khamis</strong> (SWS identifier: <code>item_list_for_gk</code>)</p></li>
+<li><p><strong>Mapping table from Input System flag to SWS</strong> (SWS identifier: <code>mapping_input_system_flag_2_sws</code>)</p></li>
+<li><p><strong>method_flag_link</strong> (SWS identifier: <code>method_flag_link</code>)</p></li>
+<li><p><strong>pp_obsolete_codes_legacy</strong> (SWS identifier: <code>pp_obsolete_codes_legacy</code>)</p></li>
+<li><p><strong>pp_token</strong> (SWS identifier: <code>pp_token</code>)</p></li>
+<li><p><strong>Price Ratio (by country)</strong> (SWS identifier: <code>pp_tcf</code>)</p></li>
+<li><p><strong>revisions2control</strong> (SWS identifier: <code>revisions2control</code>)</p></li>
+<li><p><strong>toi_data</strong> (SWS identifier: <code>toi_data</code>)</p></li>
+</ul>
+</div>
+<div id="datasets" class="section level3 unnumbered">
+<h3>Datasets</h3>
+<ul>
+<li><p><strong>Annual Producer Prices (Legacy ARIMAX)</strong> (SWS identifier: <code>annual_producer_prices_legacy_arimax</code>)</p></li>
+<li><p><strong>Annual Producer Prices (Legacy)</strong> (SWS identifier: <code>annual_producer_prices_legacy</code>)</p></li>
+<li><p><strong>Annual Producer Prices (Preparation)</strong> (SWS identifier: <code>annual_producer_prices_prep</code>)</p></li>
+<li><p><strong>Annual Producer Prices (Questionnaire)</strong> (SWS identifier: <code>annual_producer_prices_quest</code>)</p></li>
+<li><p><strong>Annual Producer Prices (Validated)</strong> (SWS identifier: <code>annual_producer_prices_validated</code>)</p></li>
+<li><p><strong>Annual Producer Prices (Validation)</strong> (SWS identifier: <code>annual_producer_prices_validation</code>)</p></li>
+<li><p><strong>Consumer Price Indices</strong> (SWS identifier: <code>consumer_price_indices</code>)</p></li>
+<li><p><strong>International Dollar Prices</strong> (SWS identifier: <code>international_dollar_prices</code>)</p></li>
+<li><p><strong>Monthly Producer Prices (Legacy)</strong> (SWS identifier: <code>monthly_producer_prices_legacy</code>)</p></li>
+<li><p><strong>Monthly Producer Prices (Preparation)</strong> (SWS identifier: <code>monthly_producer_prices_prep</code>)</p></li>
+<li><p><strong>Monthly Producer Prices (Questionnaire)</strong> (SWS identifier: <code>monthly_producer_prices_quest</code>)</p></li>
+<li><p><strong>Purchasing Power Parities</strong> (SWS identifier: <code>purchasing_power_parities</code>)</p></li>
+</ul>
+</div>
+<div id="elements-description" class="section level3 unnumbered">
+<h3>Elements description</h3>
+<p>The datasets of the Producer prices domain use three main codes for the different type of currency used:</p>
+<ul>
+<li><p><strong>Producer Price (LCU/tonne) [Lc]</strong> (code: 5530)</p></li>
+<li><p><strong>Producer Price (SLC/tonne) [Slc]</strong> (code: 5531)</p></li>
+<li><p><strong>Producer Price (USD/tonne) [US$]</strong> (code: 5532)</p></li>
+</ul>
+<p>In addition to these three main codes there are codes that pertain to derived prices and indexes:</p>
+<ul>
+<li><p><strong>Producer Price (Int $/tonne) [Int.$]</strong> (code: 5533)</p></li>
+<li><p><strong>Average Producer Price (Int. $/tonne) [Int.$]</strong> (code: 5540)</p></li>
+<li><p><strong>Producer Price Index (2014-2016 = 100)</strong> (code: 55392)</p></li>
+<li><p><strong>Purchasing Power Parities</strong> (code: 6149)</p></li>
+</ul>
+</div>
+<div id="flag-conversion" class="section level3 unnumbered">
+<h3>Flag conversion</h3>
+<p>Transitioning from the current system to the SWS also the flag system is being updated. The conversion has been performed according to the following table:</p>
+<table style="width:58%;">
+<colgroup>
+<col width="11%" />
+<col width="16%" />
+<col width="15%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><strong>FLAG description</strong></th>
+<th align="left"><strong>Current FIAS flag</strong></th>
+<th align="left"><strong>FlagObservationStatus</strong></th>
+<th align="left"><strong>FlagMethod</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Historical estimates (Prices domain)</td>
+<td align="left">‘Fz’</td>
+<td align="left">‘E’</td>
+<td align="left">‘f’</td>
+</tr>
+<tr class="even">
+<td align="left">FAO estimate</td>
+<td align="left">‘F’</td>
+<td align="left">‘E’</td>
+<td align="left">‘f’</td>
+</tr>
+<tr class="odd">
+<td align="left">Official data reported on FAO Questionnaires from countries</td>
+<td align="left">‘Q’</td>
+<td align="left">‘’</td>
+<td align="left">‘q’</td>
+</tr>
+<tr class="even">
+<td align="left">Calculated data</td>
+<td align="left">‘Fc’</td>
+<td align="left">‘I’</td>
+<td align="left">‘i’</td>
+</tr>
+<tr class="odd">
+<td align="left">Manual Estimation</td>
+<td align="left">‘Fm’</td>
+<td align="left">‘E’</td>
+<td align="left">‘f’</td>
+</tr>
+<tr class="even">
+<td align="left">Extrapolated/interpolated</td>
+<td align="left">‘Ft’</td>
+<td align="left">‘I’</td>
+<td align="left">‘e’</td>
+</tr>
+<tr class="odd">
+<td align="left">Estimated time series to complete the core data matrix</td>
+<td align="left">‘Fk’</td>
+<td align="left">‘E’</td>
+<td align="left">‘f’</td>
+</tr>
+<tr class="even">
+<td align="left">Other analytical methods</td>
+<td align="left">‘Fa’</td>
+<td align="left">‘E’</td>
+<td align="left">‘f’</td>
+</tr>
+<tr class="odd">
+<td align="left">Calculated Prices data (using TCF on official data)</td>
+<td align="left">‘C’</td>
+<td align="left">‘E’</td>
+<td align="left">‘i’</td>
+</tr>
+<tr class="even">
+<td align="left">Calculated Prices data (using TCF on estimated data)</td>
+<td align="left">‘Ce’</td>
+<td align="left">‘I’</td>
+<td align="left">‘i’</td>
+</tr>
+<tr class="odd">
+<td align="left">International Organizations</td>
+<td align="left">‘X’</td>
+<td align="left">‘X’</td>
+<td align="left">‘p’</td>
+</tr>
+<tr class="even">
+<td align="left">Estimated data visible on external</td>
+<td align="left">‘K’</td>
+<td align="left">‘E’</td>
+<td align="left">‘f’</td>
+</tr>
+<tr class="odd">
+<td align="left">Data on country official publications or web sites or reported by Int. Orgs (source is the country)</td>
+<td align="left">‘W’</td>
+<td align="left">‘X’</td>
+<td align="left">‘p’</td>
+</tr>
+<tr class="even">
+<td align="left">Official provisional data reported on FAO Questionnaires from countries</td>
+<td align="left">‘Qp’</td>
+<td align="left">‘P’</td>
+<td align="left">‘q’</td>
+</tr>
+<tr class="odd">
+<td align="left">Missing value</td>
+<td align="left">‘-’</td>
+<td align="left">‘O’</td>
+<td align="left">‘q’</td>
+</tr>
+<tr class="even">
+<td align="left">Provisional data reported on country official publications or web sites (Official)</td>
+<td align="left">‘Wp’</td>
+<td align="left">‘P’</td>
+<td align="left">‘p’</td>
+</tr>
+</tbody>
+</table>
+<p>Respectively the FlagObservationStatus and the FlagMethod are defined by the SDMX standard as: - FlagObservationStatus: for dissemination. Definition: Information on the quality of a value or an unusual or missing value. This item is normally coded and uses codes providing information about the status of a value, with respect to events such as “break”, “estimated value”, “forecast”, “missing value”, or “provisional value”. - FlagMethod: this list of methods flags is to be used by IT specialists in statistical working systems only (Statistical Working System -SWS- and others). It does not concern dissemination. It relates to the method the figure comes from.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="Harvester.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

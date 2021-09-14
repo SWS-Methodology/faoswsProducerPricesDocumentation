@@ -1,0 +1,45 @@
+# **Producer prices Produce Price Indices and Purchasing Power Parities** {#ShinyDes}
+
+Producer Price Indices (PPI) and Purchasing Power Parities are respectively calculated through the plugins: 'Producer Price Indices (PPI)' and 'Geary-Khamis'.
+
+## The Geary-Khamis system
+
+There are several aggregation methods used in international comparisons of GDP. One of the known approaches uses an international set of prices and purchasing power parities to compile comparable value aggregates. The method was developed by Geary and Khamis along with the Geary-Khamis equation system (GK). The system is used to compute the international dollar, a hypothetical unit of currency that has the same Purchasing Power Parity (PPP) that the U.S. dollar had in the United States of America at a given point. According to the study FAO (1993) and considering qij the quantity of ith commodity produced in jth country during a given period, pij the price of ith commodity in jth country in local currency, M the number of countries and N the number of commodities: 
+‘_The GK method employs the repricing and PPP approaches concurrently, and is therefore based on the reference prices of commodities as well as the purchasing power parities. Suppose $PPP_j$ represents the parity of j-th currency with a numeraire currency, called international dollars. Then the international price $P_i$ is defined as an international average of prices of i-th commodity in different countries. As the price in different countries are expressed in respective national currencies, the GK-method uses national prices after conversion into a common currency using the PPPs. Thus the international price, $P_i$, of i-th commodity is defined as:
+
+$$P_i = \sum_{j=1}^M (p_{ij}/PPP_j) \frac{q_{ij}}{ \sum_{j=1}^M q_{ij}} $$
+
+This equation implies that the international price of i-th commodity is calculated by dividing the total value of output of i-th commodity across all countries, converted in international dollars, using PPPs, by the total quantity produced of i-th commodity. These prices cannot be computed unless the system specifies $PPP_j$ . The GK system defines the parity of j-th currency through the equation 2:
+
+$$ PPP_j = \frac{ \sum_{i=1}^N p_{ij} q_{ij}}{\sum_{i=1}^N P_i q_{ij}} $$
+
+The numerator of the equation represents the total value of output in j-th country expressed in national currency, and the denominator is the value of j-th country output evaluated by repricing at international prices $P_i$, in international dollars. Then $PPP_j$ gives the number of national currency units per international dollar. The Geary-Khamis system consists of equations 1 and 2, and requires the computation of the international prices Pi, and parities PPPj , which are defined using a system of simultaneous equations.’
+
+### Iterative scheme
+Specify any positive initial value for the parities, with $PPP_1 = 1$. In the absence of any additional information, an obvious choice is to set all the parities equal to unity, i.e. $PPP_1 = 1, PPP_2 = 1, . . . , PPP_M = 1$. These values are then substituted into the formula for the international prices $P_i$ in equation 1. Once these $P_i$’s are computed, they are in turn, used in equation 2 to compute the parities $PPP_j$ . After normalizing the computed parities and making $PPP_1 = 1$, these parities are compared with the initial values. If they are identical then the computation is terminated. Otherwise the computation proceeds by repeating the calculation using the new parities. These steps are repeated until the values converge. Convergence of the iterative procedure is guaranteed by the properties of the GK system discussed in Prasada Rao (1971) and Khamis (1972). Even in cases where $M$ and $N$ are very large, the procedure converges rapidly.’
+
+
+```{r  gk_screenshot, echo=FALSE, out.width="100%", fig.cap="Plugin-Geary-Khamis"}
+knitr::include_graphics("img/gk_screenshot.png")
+```
+
+## Producer Prices Indices (PPIs)
+
+The FAO Agricultural Producer Price Indices measure annual changes in the selling prices received by
+farmers (prices at the farm-gate or at the first point of sale). The indices are constructed using price data in Standardised Local Currency (SLC).
+The plugin Producer Price Indices (PPI) calculates the indices for each country for the:
+- single item;
+- item groups.
+
+The process to obtain the PPI is straightforward. Please follow the steps below to get the results.
+- Create a new session: Click on the button New Query and choose the domain Producer Prices and the dataset Annual Producer Prices (Validated);
+- Run plugin: Click on the button Run plugin and select Producer Prices Indices (PPI)
+- Fill in the parameters as shown in the below figure (\@ref(fig:ppi_screenshot))
+
+
+```{r  ppi_screenshot, echo=FALSE, out.width="100%", fig.cap="Plugin-Producer Prices Indices."}
+knitr::include_graphics("img/ppi_screenshot.png")
+```
+
+
+

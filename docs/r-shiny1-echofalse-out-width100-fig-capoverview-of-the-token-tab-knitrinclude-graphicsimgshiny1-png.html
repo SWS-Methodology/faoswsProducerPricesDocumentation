@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Producer prices compilation into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Migration of Producer prices compilation into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Migration of Producer prices compilation into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2021-03-03">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="r-get-token-echofalse-out-width100-fig-capexample-for-the-get-token-plugin-knitrinclude-graphicsimgget-token-png.html">
+<link rel="next" href="ShinyCode.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
+<li class="chapter" data-level="1" data-path="Harvester.html"><a href="Harvester.html"><i class="fa fa-check"></i><b>1</b> <strong>Harvester procedure and initial plugins</strong></a></li>
+<li class="chapter" data-level="2" data-path="PluginCode.html"><a href="PluginCode.html"><i class="fa fa-check"></i><b>2</b> <strong>Plugin R codes</strong></a></li>
+<li class="chapter" data-level="3" data-path="ShinyDes.html"><a href="ShinyDes.html"><i class="fa fa-check"></i><b>3</b> <strong>Producer prices validation Shiny application</strong></a></li>
+<li class="chapter" data-level="4" data-path="r-shiny0-echofalse-out-width100-fig-capfirst-tab-appearing-when-opening-the-shiny-app-knitrinclude-graphicsimgshiny0-png.html"><a href="r-shiny0-echofalse-out-width100-fig-capfirst-tab-appearing-when-opening-the-shiny-app-knitrinclude-graphicsimgshiny0-png.html"><i class="fa fa-check"></i><b>4</b> <code>{r  shiny0, echo=FALSE, out.width=&quot;100%&quot;, fig.cap='First tab appearing when opening the shiny app.'} #knitr::include_graphics(&quot;img/shiny0.png&quot;) #</code></a><ul>
+<li class="chapter" data-level="4.1" data-path="r-shiny0-echofalse-out-width100-fig-capfirst-tab-appearing-when-opening-the-shiny-app-knitrinclude-graphicsimgshiny0-png.html"><a href="r-shiny0-echofalse-out-width100-fig-capfirst-tab-appearing-when-opening-the-shiny-app-knitrinclude-graphicsimgshiny0-png.html#token-tab"><i class="fa fa-check"></i><b>4.1</b> <strong>Token tab</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="r-get-token-echofalse-out-width100-fig-capexample-for-the-get-token-plugin-knitrinclude-graphicsimgget-token-png.html"><a href="r-get-token-echofalse-out-width100-fig-capexample-for-the-get-token-plugin-knitrinclude-graphicsimgget-token-png.html"><i class="fa fa-check"></i><b>5</b> <code>{r  get_Token, echo=FALSE, out.width=&quot;100%&quot;, fig.cap='Example for the _get token_ plugin.'} #knitr::include_graphics(&quot;img/get_Token.png&quot;) #</code></a></li>
+<li class="chapter" data-level="6" data-path="r-shiny1-echofalse-out-width100-fig-capoverview-of-the-token-tab-knitrinclude-graphicsimgshiny1-png.html"><a href="r-shiny1-echofalse-out-width100-fig-capoverview-of-the-token-tab-knitrinclude-graphicsimgshiny1-png.html"><i class="fa fa-check"></i><b>6</b> <code>{r  shiny1, echo=FALSE, out.width=&quot;100%&quot;, fig.cap='Overview of the _Token_ tab.'} #knitr::include_graphics(&quot;img/shiny1.png&quot;) #</code></a></li>
+<li class="chapter" data-level="7" data-path="ShinyCode.html"><a href="ShinyCode.html"><i class="fa fa-check"></i><b>7</b> <strong>The Producer prices validation Shiny R code</strong></a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Producer prices compilation into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="r-shiny1-echofalse-out.width100-fig.capoverview-of-the-_token_-tab.-knitrinclude_graphicsimgshiny1.png" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> <code>{r  shiny1, echo=FALSE, out.width=&quot;100%&quot;, fig.cap='Overview of the _Token_ tab.'} #knitr::include_graphics(&quot;img/shiny1.png&quot;) #</code></h1>
+<p>After the user made sure the shiny app connects to the required sessions, the country, time period and FBS elements to visualize in the next tab can be selected (figure ). The shiny app is conceived to work country by country as with the previous methodology.</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="r-get-token-echofalse-out-width100-fig-capexample-for-the-get-token-plugin-knitrinclude-graphicsimgget-token-png.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ShinyCode.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
