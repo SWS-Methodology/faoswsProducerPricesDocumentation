@@ -83,10 +83,12 @@ Figure \@ref(fig:WFpp) represents the essential points of the overall workflow f
 knitr::include_graphics("img/OverallWF.jpg")
 ```
 
-The first part of the workflow is the questionnaire harvester followed by the currency conversion from Local Currency Unit (LCU) to Standard Local Currency (SLC) and US Dollar (USD) along with outlier detection. A manual intervention is then required to validate the detected outliers and to proceed with the missing data imputation and validation.
+The first part of the workflow is the questionnaire harvester followed by the currency conversion from Local Currency Unit (LCU) to Standard Local Currency (SLC) and US Dollar (USD); this step migrates data from the 'questionnaire' dataset to the 'preparation' dataset, where most of the operations will be performed.
+As questionnaires contain 3 years a first control of consistency between the data previously saved in the dataset and the questionnaire ones is performed. If a substantial discrepancy is found the figure is reported in the datatable 'revisions2control'. The user can therefore check the modification and refuse them restoring the previous values if required.
+After these preliminary steps, the outlier detection is performed on the last questionnaire year, i.e. the new year for which no data is yet available in the dataset. A manual intervention through the shiny application is required to validate the detected outliers and to proceed with the missing data imputation and validation. After the missing data imputation operation result is available the user can check and impute the mising figure according to the best method. Once all the missing values have been imputed the dataset is ready to be fully validated and disseminated.
 All stages are described in the following paragraphs along with all the objects needed by routines to work properly.
 
-DESCRIBE BETTER ???
+All the SWS objects/resources used are listed below and need to be updated by the technical unit if needed.
 
 ## **SWS resources**  {-}
 
