@@ -26,7 +26,7 @@
 <meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2021-09-08">
+<meta name="date" content="2021-09-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -67,13 +67,13 @@
 <li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
 <li class="chapter" data-level="1" data-path="Harvester.html"><a href="Harvester.html"><i class="fa fa-check"></i><b>1</b> <strong>Harvester procedure and initial plugins</strong></a><ul>
 <li class="chapter" data-level="1.1" data-path="Harvester.html"><a href="Harvester.html#producer-prices-harvester-procedure"><i class="fa fa-check"></i><b>1.1</b> Producer prices harvester procedure</a></li>
-<li class="chapter" data-level="1.2" data-path="Harvester.html"><a href="Harvester.html#fromQuest2Prep"><i class="fa fa-check"></i><b>1.2</b> Plugin: pp_fromQuest2Prep</a><ul>
+<li class="chapter" data-level="1.2" data-path="Harvester.html"><a href="Harvester.html#fromQuest2Prep"><i class="fa fa-check"></i><b>1.2</b> Transfer and convert LCU questionnaire data in SLC and USD (Plugin: pp_fromQuest2Prep)</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="Harvester.html"><a href="Harvester.html#plugin-code"><i class="fa fa-check"></i><b>1.2.1</b> Plugin code</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="Harvester.html"><a href="Harvester.html#pp_refuse_update"><i class="fa fa-check"></i><b>1.3</b> Plugin: pp_refuse_update</a><ul>
+<li class="chapter" data-level="1.3" data-path="Harvester.html"><a href="Harvester.html#pp_refuse_update"><i class="fa fa-check"></i><b>1.3</b> Refuse questionnaire update (Plugin: pp_refuse_update)</a><ul>
 <li class="chapter" data-level="1.3.1" data-path="Harvester.html"><a href="Harvester.html#plugin-code-1"><i class="fa fa-check"></i><b>1.3.1</b> Plugin code</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="Harvester.html"><a href="Harvester.html#outlier-detection"><i class="fa fa-check"></i><b>1.4</b> Outlier detection</a></li>
+<li class="chapter" data-level="1.4" data-path="Harvester.html"><a href="Harvester.html#pp_OutlierDetection"><i class="fa fa-check"></i><b>1.4</b> Outlier detection (Plugin: pp_OutlierDetection)</a></li>
 <li class="chapter" data-level="1.5" data-path="Harvester.html"><a href="Harvester.html#shiny-application-outlier-validation"><i class="fa fa-check"></i><b>1.5</b> Shiny application: outlier validation</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="Imputation.html"><a href="Imputation.html"><i class="fa fa-check"></i><b>2</b> <strong>Imputation plugin and validation</strong></a></li>
@@ -142,7 +142,7 @@ Figure 1.6: Questionnaire harvester workflow.
 </div>
 </div>
 <div id="fromQuest2Prep" class="section level2">
-<h2><span class="header-section-number">1.2</span> Plugin: pp_fromQuest2Prep</h2>
+<h2><span class="header-section-number">1.2</span> Transfer and convert LCU questionnaire data in SLC and USD (Plugin: pp_fromQuest2Prep)</h2>
 <p>The data stored in the questionnaire dataset undergo no transformation, they are imported only in LCU. The conversion both in SLC and USD takes place running the ‘<strong>pp_fromQuest2Prep</strong>’ plugin.</p>
 <p>The plugin can be run from a session of the <strong>Annual Producer Prices (Preparation)</strong> dataset as shown in figure <a href="Harvester.html#fig:runplugin11">1.7</a>. Select the ‘pp_fromQuest2Prep’ plugin from the menu (figure <a href="Harvester.html#fig:runplugin12">1.8</a>) and insert the parameters to run the plugin as in figure <a href="Harvester.html#fig:runplugin13">1.9</a>. The three parameters to insert are the questionnaire start and end years, i.e. the years included in the last questionnaire round, and the countries the plugin must run for. If no country code is inserted the plugin will apply to all countries. Please note, to apply the plugin only to <em>specific countries the values inserted must be the M49 country codes</em>.</p>
 <div class="figure"><span id="fig:runplugin11"></span>
@@ -487,7 +487,7 @@ paste0(&quot;Email sent to &quot;, swsContext.userEmail)
 </div>
 </div>
 <div id="pp_refuse_update" class="section level2">
-<h2><span class="header-section-number">1.3</span> Plugin: pp_refuse_update</h2>
+<h2><span class="header-section-number">1.3</span> Refuse questionnaire update (Plugin: pp_refuse_update)</h2>
 <p>This plugin follows a manual check of the datatable ‘<em>revisions2control</em>’. This datatable contains all questionnaire data that considerably differ from the validated data (see paragraph <a href="Harvester.html#fromQuest2Prep">1.2</a> for more details). The user can therefore compare the two values (new and validated one) and, if for any of them the revision has to be rejected, check the box in the last column ‘<em>refuse_update</em>’ see figure <a href="Harvester.html#fig:refuserev">1.10</a>.</p>
 <div class="figure"><span id="fig:refuserev"></span>
 <img src="img/refuserev.png" alt="Example of refused value update." width="100%" />
@@ -677,15 +677,15 @@ paste0(&quot;Email sent to &quot;, swsContext.userEmail)
 </code></pre>
 </div>
 </div>
-<div id="outlier-detection" class="section level2">
-<h2><span class="header-section-number">1.4</span> Outlier detection</h2>
-<p>After the data have been transferred from the Questionnaire to the Preparation dataset, the outlier detection plugin can run. The process applies three different methods:</p>
+<div id="pp_OutlierDetection" class="section level2">
+<h2><span class="header-section-number">1.4</span> Outlier detection (Plugin: pp_OutlierDetection)</h2>
+<p>After the data have been transferred from the Questionnaire to the Preparation dataset, the outlier detection plugin can run. It identifies the outlier of the last questionnaire year applying three different methods:</p>
 <ol style="list-style-type: decimal">
 <li><p>interquartile range (IQR) method on the price level: let <strong>Q1</strong> and <strong>Q3</strong> be the value corresponding respectively to the first and third quartile of the price series, the IQR method identifies as outlier all values lower than <strong>Q1 - 1.5x(Q3-Q1)</strong> or higher than <strong>Q3 + 1.5x(Q3-Q1)</strong>.</p></li>
 <li><p>interquartile range (IQR) method on price variation: the same mehtod of point 1 is applied but now the price variation series is considered.</p></li>
 <li><p>‘tsclean’ function built-in in R that applies the <em>supsmu</em> method, i.e. the Friedman’s ‘super smoother’, a running lines smoother which chooses between three spans for the lines. The running lines smoothers are symmetric, with k/2data points each side of the predicted point, and values of k as 0.5 * n, 0.2 * n and 0.05 * n, where n is the number of data points. If span is specified, a single smoother with span span * n is used. The best of the three smoothers is chosen by cross-validation for each prediction. The best spans are then smoothed by a running lines smoother and the final prediction chosen by linear interpolation. The FORTRAN code says: “For small samples (n &lt; 40) or if there are substantial serial correlations between observations close in x-value, then a pre-specified fixed span smoother (span &gt; 0) should be used. Reasonable span values are 0.2 to 0.4.” Cases with non-finite values are dropped.</p></li>
 </ol>
-<p>For method 2 and 3, outlier detection is performed on the <strong>SLC logarithmic series</strong>, for method 1 the SLC price series is considered. Identified outliers according to the three methods are compared. If two or all three method identified a point as outlier, this point is flagged as outlier (E;e) and can be reviewed in the shiny application before proceeding to the missing data imputation. The data calculated by the plugin are saved into the <strong>Annual Producer Prices (Preparation)</strong> dataset.</p>
+<p>For method 2 and 3, outlier detection is performed on the <strong>SLC logarithmic series</strong>, for method 1 the SLC price series is considered. Identified outliers according to the three methods are compared. If two or all three method identified a point as outlier, this point is flagged as outlier (E;e) and can be reviewed in the shiny application before proceeding to the missing data imputation. The flag of figures identified as outliers are saved into the <strong>Annual Producer Prices (Preparation)</strong> dataset.</p>
 <div class="figure"><span id="fig:outlier1"></span>
 <img src="img/OutlierPlugin.jpg" alt="First step of the outlier plugin." width="100%" />
 <p class="caption">
@@ -701,8 +701,8 @@ Figure 1.13: Second step of the outlier plugin.
 </div>
 <div id="shiny-application-outlier-validation" class="section level2">
 <h2><span class="header-section-number">1.5</span> Shiny application: outlier validation</h2>
-<p>After the review of the initial data coming from the questionnaire, another manual step to perform is the outlier validation. The plugin <strong>pp_Quest2Prep</strong> includes an outlier detection routine and the user has to validate its output. This validation step takes place in a <em>shiny application</em> that can be found at the url <a href="http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/" class="uri">http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/</a>. The application is also an essential tool for the imputation validation step and for the series revision that will be explained in the following chapters.</p>
-<p>To check the detected outlier and possibly midify them, the user has to retrieve a token from the Preparation dataset session. The token is essential for the shiny to connect to the SWS and session and be able to overwrite data not yet saved. The token is obtain by selecting the plugin ‘Get_token’ and selecting the button ‘Get debug token’ at the bottom right part of the pop-up screen <a href="Harvester.html#fig:gettoken1">1.14</a>.</p>
+<p>After the review of the initial data coming from the questionnaire, the user must validate the output of the plugin <strong>pp_OutlierDetection</strong>. This validation step takes place in a <em>shiny application</em> that can be found at the url <a href="http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/" class="uri">http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/</a>. The application is also an essential tool for the imputation validation step and for the series revision that will be explained in the following chapters.</p>
+<p>To check the detected outlier and possibly modify them, the user has to retrieve a token from the Preparation dataset session. The token is essential for the shiny to connect to the SWS and session and be able to overwrite data in a session. The token is obtained selecting the plugin ‘Get_token’ and selecting the button ‘Get debug token’ at the bottom right part of the pop-up screen <a href="Harvester.html#fig:gettoken1">1.14</a>.</p>
 <div class="figure"><span id="fig:gettoken1"></span>
 <img src="img/gettoken1.png" alt="Creation of session token." width="100%" />
 <p class="caption">
@@ -722,7 +722,7 @@ Figure 1.15: Initial screen of the shiny application.
 Figure 1.16: First step to create a session token.
 </p>
 </div>
-<p>After inserting the token, the user can check the detected outlier and either classify it as ‘Normal’ figure or as an ‘Outlier’ <a href="Harvester.html#fig:shinyout2">1.17</a>.</p>
+<p>After inserting the token, the user can select the country and the year of the last questionnaire so that the shiny provides outlier (if any) detected by the plugin for the country. The user checks the detected outlier and either classify it as ‘Normal’ figure or as an ‘Outlier’ <a href="Harvester.html#fig:shinyout2">1.17</a>.</p>
 <div class="figure"><span id="fig:shinyout2"></span>
 <img src="img/shinyout2.png" alt="Screen of the shiny app for a selected outlier commodity to review." width="100%" />
 <p class="caption">
