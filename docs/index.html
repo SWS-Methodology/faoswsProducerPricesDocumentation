@@ -26,7 +26,7 @@
 <meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2021-09-14">
+<meta name="date" content="2021-10-03">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
   
   
 
-<link rel="next" href="Harvester.html">
+<link rel="next" href="user-guide.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -78,10 +78,8 @@
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#flag-conversion"><i class="fa fa-check"></i>Flag conversion</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="Harvester.html"><a href="Harvester.html"><i class="fa fa-check"></i><b>1</b> <strong>Harvester procedure and initial plugins</strong></a></li>
-<li class="chapter" data-level="2" data-path="Imputation.html"><a href="Imputation.html"><i class="fa fa-check"></i><b>2</b> <strong>Imputation plugin and validation</strong></a></li>
-<li class="chapter" data-level="3" data-path="ShinyDes.html"><a href="ShinyDes.html"><i class="fa fa-check"></i><b>3</b> <strong>Producer prices Produce Price Indices and Purchasing Power Parities</strong></a></li>
-<li class="chapter" data-level="4" data-path="ShinyCode.html"><a href="ShinyCode.html"><i class="fa fa-check"></i><b>4</b> <strong>The Producer prices validation Shiny R code</strong></a></li>
+<li class="chapter" data-level="1" data-path="user-guide.html"><a href="user-guide.html"><i class="fa fa-check"></i><b>1</b> <strong>User Guide</strong></a></li>
+<li class="chapter" data-level="2" data-path="methodological-guide.html"><a href="methodological-guide.html"><i class="fa fa-check"></i><b>2</b> <strong>Methodological Guide</strong></a></li>
 </ul>
 
       </nav>
@@ -102,7 +100,7 @@
 <div id="header">
 <h1 class="title">Migration of Producer prices compilation into the SWS</h1>
 <h4 class="author"><em>Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)</em></h4>
-<h4 class="date"><em>2021-09-14</em></h4>
+<h4 class="date"><em>2021-10-03</em></h4>
 </div>
 <div id="introduction" class="section level1 unnumbered">
 <h1><strong>Introduction</strong></h1>
@@ -207,6 +205,7 @@ Figure .: General workflow.
 <li><p><strong>List of items - Geary-Khamis</strong> (SWS identifier: <code>item_list_for_gk</code>)</p></li>
 <li><p><strong>Mapping table from Input System flag to SWS</strong> (SWS identifier: <code>mapping_input_system_flag_2_sws</code>)</p></li>
 <li><p><strong>method_flag_link</strong> (SWS identifier: <code>method_flag_link</code>)</p></li>
+<li><p><strong>outlier_detected</strong> (SWS identifier: <code>outlier_detected</code>)</p></li>
 <li><p><strong>pp_obsolete_codes_legacy</strong> (SWS identifier: <code>pp_obsolete_codes_legacy</code>)</p></li>
 <li><p><strong>pp_token</strong> (SWS identifier: <code>pp_token</code>)</p></li>
 <li><p><strong>Price Ratio (by country)</strong> (SWS identifier: <code>pp_tcf</code>)</p></li>
@@ -221,13 +220,12 @@ Figure .: General workflow.
 <li><p><strong>Annual Producer Prices (Legacy)</strong> (SWS identifier: <code>annual_producer_prices_legacy</code>)</p></li>
 <li><p><strong>Annual Producer Prices (Preparation)</strong> (SWS identifier: <code>annual_producer_prices_prep</code>)</p></li>
 <li><p><strong>Annual Producer Prices (Questionnaire)</strong> (SWS identifier: <code>annual_producer_prices_quest</code>)</p></li>
-<li><p><strong>Annual Producer Prices (Validated)</strong> (SWS identifier: <code>annual_producer_prices_validated</code>)</p></li>
-<li><p><strong>Annual Producer Prices (Validation)</strong> (SWS identifier: <code>annual_producer_prices_validation</code>)</p></li>
+<li><p><strong>Annual Producer Prices (Validated)</strong> (SWS identifier: <code>annual_producer_prices_validation</code>)</p></li>
 <li><p><strong>Consumer Price Indices</strong> (SWS identifier: <code>consumer_price_indices</code>)</p></li>
 <li><p><strong>International Dollar Prices</strong> (SWS identifier: <code>international_dollar_prices</code>)</p></li>
 <li><p><strong>Monthly Producer Prices (Legacy)</strong> (SWS identifier: <code>monthly_producer_prices_legacy</code>)</p></li>
-<li><p><strong>Monthly Producer Prices (Preparation)</strong> (SWS identifier: <code>monthly_producer_prices_prep</code>)</p></li>
 <li><p><strong>Monthly Producer Prices (Questionnaire)</strong> (SWS identifier: <code>monthly_producer_prices_quest</code>)</p></li>
+<li><p><strong>Monthly Producer Prices (Validated)</strong> (SWS identifier: <code>monthly_producer_prices_prep</code>)</p></li>
 <li><p><strong>Purchasing Power Parities</strong> (SWS identifier: <code>purchasing_power_parities</code>)</p></li>
 </ul>
 </div>
@@ -375,7 +373,7 @@ Figure .: General workflow.
         </div>
       </div>
 
-<a href="Harvester.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="user-guide.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

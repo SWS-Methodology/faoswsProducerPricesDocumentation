@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Producer prices compilation into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Migration of Producer prices compilation into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Migration of Producer prices compilation into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2021-10-03">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="user-guide.html">
+<link rel="next" href="placeholder.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
+<li class="chapter" data-level="1" data-path="user-guide.html"><a href="user-guide.html"><i class="fa fa-check"></i><b>1</b> <strong>User Guide</strong></a></li>
+<li class="chapter" data-level="2" data-path="methodological-guide.html"><a href="methodological-guide.html"><i class="fa fa-check"></i><b>2</b> <strong>Methodological Guide</strong></a><ul>
+<li class="chapter" data-level="2.1" data-path="methodological-guide.html"><a href="methodological-guide.html#pp_OutlierDetection"><i class="fa fa-check"></i><b>2.1</b> Outlier detection (Plugin: pp_OutlierDetection)</a></li>
+<li class="chapter" data-level="2.2" data-path="methodological-guide.html"><a href="methodological-guide.html#methodology-imputation-plugin-plugin-pp_imputationmethods"><i class="fa fa-check"></i><b>2.2</b> Methodology <strong>Imputation plugin</strong> (Plugin: PP_ImputationMethods)</a></li>
+<li class="chapter" data-level="2.3" data-path="methodological-guide.html"><a href="methodological-guide.html#producer-prices-indices-ppis"><i class="fa fa-check"></i><b>2.3</b> Producer Prices Indices (PPIs)</a></li>
+<li class="chapter" data-level="2.4" data-path="methodological-guide.html"><a href="methodological-guide.html#purchasing-power-parities-through-the-geary-khamis-system"><i class="fa fa-check"></i><b>2.4</b> Purchasing Power Parities through the Geary-Khamis system</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="methodological-guide.html"><a href="methodological-guide.html#iterative-scheme"><i class="fa fa-check"></i><b>2.4.1</b> Iterative scheme</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="placeholder.html"><a href="placeholder.html"><i class="fa fa-check"></i><b>3</b> Placeholder</a></li>
+<li class="chapter" data-level="4" data-path="placeholder-1.html"><a href="placeholder-1.html"><i class="fa fa-check"></i><b>4</b> Placeholder</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Producer prices compilation into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="methodological-guide" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> <strong>Methodological Guide</strong></h1>
+<p>In this chapter the plugin involving computations and statistical methods are described. The R code for each plugin can be downloaded from the SWS and the shiny can be provided by the IT. R scripts are commented so to ease the reading by an external programmer.</p>
+<div id="pp_OutlierDetection" class="section level2">
+<h2><span class="header-section-number">2.1</span> Outlier detection (Plugin: pp_OutlierDetection)</h2>
+<p>After the data have been transferred from the Questionnaire to the Preparation dataset, and the data have been revised up to available year <em>t-1</em> (being <em>t</em> the last year available in the questionnaire) the outlier detection runs for the last available year <em>t</em>. The plugin <strong>pp_OutlierDetection</strong> identifies the outlier of the last questionnaire year applying three different methods: interquartile range (IQR) on the price level, interquartile range (IQR) on price variation, built-in in R function that applies the <em>supsmu</em> method.</p>
+<ol style="list-style-type: decimal">
+<li><p>interquartile range (IQR) method on the price level: let <strong>Q1</strong> and <strong>Q3</strong> be the value corresponding respectively to the first and third quartile of the price series, the IQR method identifies as outlier all values lower than <strong>Q1 - 1.5x(Q3-Q1)</strong> or higher than <strong>Q3 + 1.5x(Q3-Q1)</strong>.</p></li>
+<li><p>interquartile range (IQR) method on price variation: the same mehtod of point 1 is applied but now the price variation series is considered.</p></li>
+<li><p>‘tsclean’ function built-in in R that applies the <em>supsmu</em> method, i.e. the Friedman’s ‘super smoother’, a running lines smoother which chooses between three spans for the lines. The running lines smoothers are symmetric, with k/2data points each side of the predicted point, and values of k as 0.5 * n, 0.2 * n and 0.05 * n, where n is the number of data points. If span is specified, a single smoother with span span * n is used. The best of the three smoothers is chosen by cross-validation for each prediction. The best spans are then smoothed by a running lines smoother and the final prediction chosen by linear interpolation. The FORTRAN code says: “For small samples (n &lt; 40) or if there are substantial serial correlations between observations close in x-value, then a pre-specified fixed span smoother (span &gt; 0) should be used. Reasonable span values are 0.2 to 0.4.” Cases with non-finite values are dropped.</p></li>
+</ol>
+<p>For method 2 and 3, outlier detection is performed on the <strong>SLC logarithmic series</strong>, for method 1 the SLC price series is considered. Identified outliers according to the three methods are compared. If two or all three method identified a point as outlier, this point is flagged as outlier (E;e) and can be reviewed in the shiny application before proceeding to the missing data imputation. The flag of figures identified as outliers are saved into the <strong>Annual Producer Prices (Preparation)</strong> dataset.</p>
+</div>
+<div id="methodology-imputation-plugin-plugin-pp_imputationmethods" class="section level2">
+<h2><span class="header-section-number">2.2</span> Methodology <strong>Imputation plugin</strong> (Plugin: PP_ImputationMethods)</h2>
+<p>After the outlier have been reviewed either for one or for all countries, the missing data imputation can be performed. The imputation of missing data first happens in the SWS via plugin and it is then assessed via shiny app. The SWS plugin called ‘PP_imputationMethods’ estimate missing data according to up to six different methods and save the results in the ‘imputation_annual_prices’ datatable.</p>
+<p>When the plugin runs, it considers SLC series and completes the series where the last questionnaire year is missing according to the following methodologies: ARIMAX, Ensemble approach, Linear model, Commodity group approach, Consumer Price Index (CPI) based approach and Price ratio approach.</p>
+<p>The auxiliary variables used for these models are:</p>
+<ul>
+<li><p>Value added of Agriculture, Forestry and Fishing (logarithmic form, from SWS Macro indicator domain)</p></li>
+<li><p>Country GDP (logarithmic form, from SWS Macro indicator domain)</p></li>
+<li><p>GDP per capita</p></li>
+<li><p>Gross fixed capital formation of agriculture, forestry and fishing (from published Capital Stock domain in FAOSTAT)</p></li>
+<li><p>Yield, i.e. harvested production per unit of harvested area for crop products (from SWS Agriculture production dataset)</p></li>
+<li><p>Trade openness index (calculated by the ECO team and stored in the datatable ‘toi_data’)</p></li>
+<li><p>Price ratios (as per datatable ‘pp_tcf’)</p></li>
+</ul>
+<p>All imputation is performed considering the logarithmic value of the price in SLC. Results of the plugin, i.e. prices estimated according to the methods listed above are stored in the datatable ‘imputation_annual_prices’. These values are presented in the shiny application so the user is not required to check upon the datatable itself.</p>
+<p>The first method calculated by the plugin is the price ratio. If available, the reference price is multiplied by the price ratio to calculate the missing price.</p>
+<p>After the price ratio method all other approaches are implemented inside a loop. The loop consider separately each country-commodity combination.</p>
+<ol style="list-style-type: decimal">
+<li><p>ARIMAX: The key feature of the ARIMAX approach is the presence of covariates. The choice of covariates is performed empirically by running ARIMAX models for all possible combinations and choosing the one with the minimum Akaike Information Criteria (AIC) value. Once the model is selected the forecast is performed on the series and the price imputed. The covariate are: GDP, value added of agriculture, forestry and fishing (both from the Macro Indicator domain), yield (from the Agriculture production dataset), Trade Openness Index (from the <em>toi_data</em> datatable).</p></li>
+<li><p>Linear model: it follows the same approach of the ARIMAX approach but uses a simple linear regression to estimate and impute the missing price.</p></li>
+<li><p>Ensemble approach: the ensemble method builds a collection of simple models and combine them to obtain a composite model. Averaging multiple models the risk of choosing a poor model is reduced. The approach has two main steps: the building of the models and their combination. The model considered are: mean (mean of all observations), median (median of all observations), linear (linear regression), exponential (exponential function), logistic (logistic function), naive (linear interpolation followed by last observation carried forward and first observation carried backward), ARIMA (selected based on the corrected Akaike’s Information Criterion (AICC) and imputation via Kalman Filter), LOESS (local regression with linear models and model window varying based on sample size), splines(cubic spline interpolation), MARS (Multivariate Adaptive Regression Spline), mixed model (linear mixed model with time as a fixed effect and country as the random effect). All these models are then combined so that the final result is a weighted average of all the input models. This approach is completely automatized by the R function in the R package faoswsImputation. An extended presentation is available in the faoswsImputation package along with the function used to impute variable in the Git Hub repository SWS-Methodology.</p></li>
+<li><p>Commodity group approach: starting from the CPC hierarchical classification, the higher level of the considered product is taken and all products belonging to this level are considered. The growth rate of each product is computed and the median of the group is calculated. The missing price value is then imputed applying the median growth rate to the latest available price. Depending on the availability of prices, the plugin consider two different level of the hierarchy.</p></li>
+<li><p>Consumer Price Index (CPI) approach: CPI values are pulled from the SWS dataset ‘consumer_price_indices’. If available, the food CPI is considered otherwise the general CPI is used. The growth rate is computed and applied to the latest price available to calculate the missing value.</p></li>
+<li><p>Gross Domestic Price (GDP) approach: this approach considers either the value added of agriculture, forestry and fishing or the GDP if the previous is not available. As in previous approaches the growth rate is calculated and applied to the latest price available. Data used come from the ‘Complete dataset’ in the Macro Indicators domain.</p></li>
+</ol>
+<p>All these possible imputation values are stored in the ‘imputation_annual_prices’ datatable and are displayed as possible values in the shiny application.</p>
+<p>There is a second part of the plugin that performs interpolation. The interpolation is perfomed in case an official value has been collected through questionnaire or other publications in the latest year but the previous years had been imputed. To check if previous imputations were appropriate, values are re-calculated through interpolation and proposed to the user through the shiny app.</p>
+<p>Interpolation performed is linear, performed through a built-in R function <em>na.approx</em>. The interpolated values are saved in the ‘interpolation_annual_prices’ datatable and presented to the user in the shiny app.</p>
+</div>
+<div id="producer-prices-indices-ppis" class="section level2">
+<h2><span class="header-section-number">2.3</span> Producer Prices Indices (PPIs)</h2>
+<p>The FAO Agricultural Producer Price Indices measure annual changes in the selling prices received by farmers (prices at the farm-gate or at the first point of sale). The indices are constructed using price data in Standardised Local Currency (SLC). The plugin Producer Price Indices (PPI) calculates the indices for each country for the: - single item; - item groups.</p>
+<p>Single items are calculated by dividing the SLC price in the current year by the base year SLC price (e.g. average 2014-2016). The average price is calculated using estimated and official data, but not data specifically flagged not to disseminate.</p>
+<p><span class="math display">\[PPI_{single item} = p / p_0\]</span></p>
+<p>Where p = current year price in SLC <span class="math inline">\(p_0\)</span> = base year (average 2014-2016) price in SLC</p>
+<p>For item groups, multiply current SLC price by base year (average 2014-2016) production quantity and by any group conversion factor for single items in each item group. Sum this and divide it by the sum of the single items’ base year (average 2014-2016) SLC price multiplied by the base year (average 2014-2016) production quantity and by any group conversion factor.</p>
+<p><span class="math display">\[PPI_{group} = \sum(p * q_0 * Group factor) / \sum(p_0 * q_0 * Group factor)\]</span> over all single items in item group</p>
+<p>Where <span class="math inline">\(q_0\)</span> = base year (average 2014-2016) production quantity in MT Group factor = for some item groups, such as Oilcrops primary, there is a conversion factor to use when aggregating.</p>
+</div>
+<div id="purchasing-power-parities-through-the-geary-khamis-system" class="section level2">
+<h2><span class="header-section-number">2.4</span> Purchasing Power Parities through the Geary-Khamis system</h2>
+<p>There are several aggregation methods used in international comparisons of GDP. One of the known approaches uses an international set of prices and purchasing power parities to compile comparable value aggregates. The method was developed by Geary and Khamis along with the Geary-Khamis equation system (GK). The system is used to compute the international dollar, a hypothetical unit of currency that has the same Purchasing Power Parity (PPP) that the U.S. dollar had in the United States of America at a given point. According to the study FAO (1993) and considering qij the quantity of ith commodity produced in jth country during a given period, pij the price of ith commodity in jth country in local currency, M the number of countries and N the number of commodities: ‘_The GK method employs the repricing and PPP approaches concurrently, and is therefore based on the reference prices of commodities as well as the purchasing power parities. Suppose <span class="math inline">\(PPP_j\)</span> represents the parity of j-th currency with a numeraire currency, called international dollars. Then the international price <span class="math inline">\(P_i\)</span> is defined as an international average of prices of i-th commodity in different countries. As the price in different countries are expressed in respective national currencies, the GK-method uses national prices after conversion into a common currency using the PPPs. Thus the international price, <span class="math inline">\(P_i\)</span>, of i-th commodity is defined as:</p>
+<p><span class="math display">\[P_i = \sum_{j=1}^M (p_{ij}/PPP_j) \frac{q_{ij}}{ \sum_{j=1}^M q_{ij}} \]</span></p>
+<p>This equation implies that the international price of i-th commodity is calculated by dividing the total value of output of i-th commodity across all countries, converted in international dollars, using PPPs, by the total quantity produced of i-th commodity. These prices cannot be computed unless the system specifies <span class="math inline">\(PPP_j\)</span> . The GK system defines the parity of j-th currency through the equation 2:</p>
+<p><span class="math display">\[ PPP_j = \frac{ \sum_{i=1}^N p_{ij} q_{ij}}{\sum_{i=1}^N P_i q_{ij}} \]</span></p>
+<p>The numerator of the equation represents the total value of output in j-th country expressed in national currency, and the denominator is the value of j-th country output evaluated by repricing at international prices <span class="math inline">\(P_i\)</span>, in international dollars. Then <span class="math inline">\(PPP_j\)</span> gives the number of national currency units per international dollar. The Geary-Khamis system consists of equations 1 and 2, and requires the computation of the international prices Pi, and parities PPPj , which are defined using a system of simultaneous equations.’</p>
+<div id="iterative-scheme" class="section level3">
+<h3><span class="header-section-number">2.4.1</span> Iterative scheme</h3>
+<p>Specify any positive initial value for the parities, with <span class="math inline">\(PPP_1 = 1\)</span>. In the absence of any additional information, an obvious choice is to set all the parities equal to unity, i.e. <span class="math inline">\(PPP_1 = 1, PPP_2 = 1, . . . , PPP_M = 1\)</span>. These values are then substituted into the formula for the international prices <span class="math inline">\(P_i\)</span> in equation 1. Once these <span class="math inline">\(P_i\)</span>’s are computed, they are in turn, used in equation 2 to compute the parities <span class="math inline">\(PPP_j\)</span> . After normalizing the computed parities and making <span class="math inline">\(PPP_1 = 1\)</span>, these parities are compared with the initial values. If they are identical then the computation is terminated. Otherwise the computation proceeds by repeating the calculation using the new parities. These steps are repeated until the values converge. Convergence of the iterative procedure is guaranteed by the properties of the GK system discussed in Prasada Rao (1971) and Khamis (1972). Even in cases where <span class="math inline">\(M\)</span> and <span class="math inline">\(N\)</span> are very large, the procedure converges rapidly.’</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="user-guide.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="placeholder.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

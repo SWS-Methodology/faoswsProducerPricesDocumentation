@@ -147,6 +147,8 @@ Data tables are mainly used to store information helping R modules to output ana
 
 - **method_flag_link** (SWS identifier: `method_flag_link`) 
 
+- **outlier_detected** (SWS identifier: `outlier_detected`) 
+
 - **pp_obsolete_codes_legacy** (SWS identifier: `pp_obsolete_codes_legacy`) 
 
 - **pp_token** (SWS identifier: `pp_token`) 
@@ -169,9 +171,7 @@ Data tables are mainly used to store information helping R modules to output ana
 
 - **Annual Producer Prices (Questionnaire)** (SWS identifier: `annual_producer_prices_quest`) 
 
-- **Annual Producer Prices (Validated)** (SWS identifier: `annual_producer_prices_validated`) 
-
-- **Annual Producer Prices (Validation)** (SWS identifier: `annual_producer_prices_validation`) 
+- **Annual Producer Prices (Validated)** (SWS identifier: `annual_producer_prices_validation`) 
 
 - **Consumer Price Indices** (SWS identifier: `consumer_price_indices`)
 
@@ -179,9 +179,9 @@ Data tables are mainly used to store information helping R modules to output ana
 
 - **Monthly Producer Prices (Legacy)** (SWS identifier: `monthly_producer_prices_legacy`) 
 
-- **Monthly Producer Prices (Preparation)** (SWS identifier: `monthly_producer_prices_prep`) 
-
 - **Monthly Producer Prices (Questionnaire)** (SWS identifier: `monthly_producer_prices_quest`) 
+
+- **Monthly Producer Prices (Validated)** (SWS identifier: `monthly_producer_prices_prep`) 
 
 - **Purchasing Power Parities** (SWS identifier: `purchasing_power_parities`) 
 

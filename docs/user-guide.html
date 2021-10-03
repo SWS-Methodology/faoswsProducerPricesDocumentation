@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Producer prices compilation into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Migration of Producer prices compilation into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Migration of Producer prices compilation into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2021-10-03">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="Harvester.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
+<li class="chapter" data-level="1" data-path="user-guide.html"><a href="user-guide.html"><i class="fa fa-check"></i><b>1</b> <strong>User Guide</strong></a></li>
+<li class="chapter" data-level="2" data-path="Harvester.html"><a href="Harvester.html"><i class="fa fa-check"></i><b>2</b> <strong>Descritpion of each step from the user point of view</strong></a><ul>
+<li class="chapter" data-level="2.1" data-path="Harvester.html"><a href="Harvester.html#producer-prices-harvester-procedure"><i class="fa fa-check"></i><b>2.1</b> Producer prices harvester procedure</a></li>
+<li class="chapter" data-level="2.2" data-path="Harvester.html"><a href="Harvester.html#fromQuest2Prep"><i class="fa fa-check"></i><b>2.2</b> Transfer and convert LCU questionnaire data in SLC and USD (Plugin: pp_fromQuest2Prep)</a></li>
+<li class="chapter" data-level="2.3" data-path="Harvester.html"><a href="Harvester.html#pp_refuse_update"><i class="fa fa-check"></i><b>2.3</b> Refuse questionnaire update (Plugin: pp_refuse_update)</a></li>
+<li class="chapter" data-level="2.4" data-path="Harvester.html"><a href="Harvester.html#pp_OutlierDetection"><i class="fa fa-check"></i><b>2.4</b> Outlier detection (Plugin: pp_OutlierDetection)</a></li>
+<li class="chapter" data-level="2.5" data-path="Harvester.html"><a href="Harvester.html#shiny-application-outlier-validation"><i class="fa fa-check"></i><b>2.5</b> Shiny application: outlier validation</a></li>
+<li class="chapter" data-level="2.6" data-path="Harvester.html"><a href="Harvester.html#Imputation"><i class="fa fa-check"></i><b>2.6</b> Data imputation and interpolation</a></li>
+<li class="chapter" data-level="2.7" data-path="Harvester.html"><a href="Harvester.html#shiny-application-missing-data-imputation"><i class="fa fa-check"></i><b>2.7</b> Shiny application: Missing data imputation</a></li>
+<li class="chapter" data-level="2.8" data-path="Harvester.html"><a href="Harvester.html#shiny-application-interpolation"><i class="fa fa-check"></i><b>2.8</b> Shiny application: Interpolation</a></li>
+<li class="chapter" data-level="2.9" data-path="Harvester.html"><a href="Harvester.html#shiny-application-series-revision"><i class="fa fa-check"></i><b>2.9</b> Shiny application: Series revision</a></li>
+<li class="chapter" data-level="2.10" data-path="Harvester.html"><a href="Harvester.html#validateimputation"><i class="fa fa-check"></i><b>2.10</b> Plugin: pp_save_validated_data</a></li>
+<li class="chapter" data-level="2.11" data-path="Harvester.html"><a href="Harvester.html#transfer-with-tag-the-validated-data-to-the-validated-dataset"><i class="fa fa-check"></i><b>2.11</b> Transfer with tag the validated data to the validated dataset</a></li>
+<li class="chapter" data-level="2.12" data-path="Harvester.html"><a href="Harvester.html#compute-the-ppis-through-the-producer-price-indices-ppi-plugin"><i class="fa fa-check"></i><b>2.12</b> Compute the PPIs through the <em>Producer Price Indices (PPI)</em> plugin</a></li>
+<li class="chapter" data-level="2.13" data-path="Harvester.html"><a href="Harvester.html#compute-the-international-dollar-price-and-the-purchasing-power-parities-through-the-geary-khamis-plugin"><i class="fa fa-check"></i><b>2.13</b> Compute the International dollar price and the Purchasing power parities through the <em>Geary-Khamis</em> plugin</a></li>
+<li class="chapter" data-level="2.14" data-path="Harvester.html"><a href="Harvester.html#transfer-to-the-qi-and-the-dissemination-domain-the-dataset-to-be-published-through-tagged-dataset"><i class="fa fa-check"></i><b>2.14</b> Transfer to the QI and the Dissemination domain the dataset to be published through tagged dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="methodological-guide.html"><a href="methodological-guide.html"><i class="fa fa-check"></i><b>3</b> <strong>Methodological Guide</strong></a></li>
+<li class="chapter" data-level="4" data-path="ShinyDes.html"><a href="ShinyDes.html"><i class="fa fa-check"></i><b>4</b> <strong>Producer prices Produce Price Indices and Purchasing Power Parities</strong></a></li>
+<li class="chapter" data-level="5" data-path="ShinyCode.html"><a href="ShinyCode.html"><i class="fa fa-check"></i><b>5</b> <strong>The Producer prices validation Shiny R code</strong></a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Producer prices compilation into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="user-guide" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> <strong>User Guide</strong></h1>
+<p>The procedure to complete the workflow of the Producer prices compilation has 14 steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Questionnaire harvester</p></li>
+<li><p>Plugin to revise and convert data from LCU to SLC and USD <em>pp_fromQuest2Prep</em></p></li>
+<li><p>Plugin <em>pp_refuse_update</em> (optional if any questionnaire data is rejected)</p></li>
+<li><p>Plugin <em>pp_OutlierDetection</em></p></li>
+<li><p>Revision of detected outliers in the shiny application ‘Outlier validation’ tab</p></li>
+<li><p>Plugin <em>PP_ImputationMethods</em> to impute missing data and/or interpolate series</p></li>
+<li><p>Imputation step to perform through the shiny app: ‘Missing data imputation’</p></li>
+<li><p>Review and validate interpolated data in the shiny ‘Interpolation’ tabs</p></li>
+<li><p>If needed a tab to revise series is available in the shiny app ‘Series revision’ tab</p></li>
+<li><p>Transfer imputed data to the dataset through the plugin <em>pp_save_validated_data</em></p></li>
+<li><p>Transfer with tag the validated data to the validated dataset</p></li>
+<li><p>Compute the PPIs through the <em>Producer Price Indices (PPI)</em> plugin</p></li>
+<li><p>Compute the International dollar price and the Purchasing power parities through the <em>Geary-Khamis</em> plugin</p></li>
+<li><p>Transfer to the QI and the Dissemination domain the dataset to be published through tagged dataset</p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Harvester.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
