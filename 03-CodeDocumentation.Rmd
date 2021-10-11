@@ -1,2 +1,8 @@
-# **Code documentation**
+# **Code and additional material references**
 
+The code of both the shiny application and of the plugin are available both in the SWS and in the project GitHub repository.
+The code is commented to make articulated passages clearer. 
+
+The GitHub repository https://github.com/SWS-Methodology/faoswsProducerPrices contains all the code and the additional material that has been used to implement the Producer Prices domain into the SWS.
+
+The Admin console of the SWS provides access to all the plugin codes as well https://sws.fao.org/admin/ui/plugin/all.
