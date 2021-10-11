@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Producer prices compilation into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Migration of Producer prices compilation into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Migration of Producer prices compilation into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the Economic team of the Statistical division (ESSD) into the Corporate Statistical Working System (SWS) for the imputation and validation of producer prices time series." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2021-10-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="user-guide.html">
+<link rel="next" href="methodological-guide.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
+<li class="chapter" data-level="1" data-path="user-guide.html"><a href="user-guide.html"><i class="fa fa-check"></i><b>1</b> <strong>User Guide</strong></a></li>
+<li class="chapter" data-level="2" data-path="Harvester.html"><a href="Harvester.html"><i class="fa fa-check"></i><b>2</b> <strong>Descritpion of each step from the user point of view</strong></a><ul>
+<li class="chapter" data-level="2.1" data-path="Harvester.html"><a href="Harvester.html#data-harvesting"><i class="fa fa-check"></i><b>2.1</b> Data harvesting</a></li>
+<li class="chapter" data-level="2.2" data-path="Harvester.html"><a href="Harvester.html#fromQuest2Prep"><i class="fa fa-check"></i><b>2.2</b> Data analysis and conversion from LCU to SLC and USD (Plugin: pp_fromQuest2Prep)</a></li>
+<li class="chapter" data-level="2.3" data-path="Harvester.html"><a href="Harvester.html#pp_refuse_update"><i class="fa fa-check"></i><b>2.3</b> Data editing following the questionnaire harvester (Plugin: pp_refuse_update)</a></li>
+<li class="chapter" data-level="2.4" data-path="Harvester.html"><a href="Harvester.html#pp_OutlierDetection"><i class="fa fa-check"></i><b>2.4</b> Data analysis and quality control: Outlier detection (Plugin: pp_OutlierDetection)</a></li>
+<li class="chapter" data-level="2.5" data-path="Harvester.html"><a href="Harvester.html#data-analysis-and-quality-control-outlier-validation"><i class="fa fa-check"></i><b>2.5</b> Data analysis and quality control: Outlier validation</a></li>
+<li class="chapter" data-level="2.6" data-path="Harvester.html"><a href="Harvester.html#Imputation"><i class="fa fa-check"></i><b>2.6</b> Missing data imputation and interpolation</a></li>
+<li class="chapter" data-level="2.7" data-path="Harvester.html"><a href="Harvester.html#missing-data-imputation-control-and-validation"><i class="fa fa-check"></i><b>2.7</b> Missing data imputation control and validation</a></li>
+<li class="chapter" data-level="2.8" data-path="Harvester.html"><a href="Harvester.html#interpolation-control-and-validation"><i class="fa fa-check"></i><b>2.8</b> Interpolation control and validation</a></li>
+<li class="chapter" data-level="2.9" data-path="Harvester.html"><a href="Harvester.html#data-analysis-and-series-revision"><i class="fa fa-check"></i><b>2.9</b> Data analysis and series revision</a></li>
+<li class="chapter" data-level="2.10" data-path="Harvester.html"><a href="Harvester.html#validateimputation"><i class="fa fa-check"></i><b>2.10</b> Dataset validation (Plugin: pp_save_validated_data)</a></li>
+<li class="chapter" data-level="2.11" data-path="Harvester.html"><a href="Harvester.html#final-data-validation-and-output-transfer"><i class="fa fa-check"></i><b>2.11</b> Final data validation and output transfer</a></li>
+<li class="chapter" data-level="2.12" data-path="Harvester.html"><a href="Harvester.html#derived-indicator-calculation-ppis-plugin-producer-price-indices-ppi"><i class="fa fa-check"></i><b>2.12</b> Derived indicator calculation: PPIs (Plugin: Producer Price Indices (PPI))</a></li>
+<li class="chapter" data-level="2.13" data-path="Harvester.html"><a href="Harvester.html#derived-indicator-calculation-compute-the-international-dollar-price-and-the-purchasing-power-parities-plugin-geary-khamis"><i class="fa fa-check"></i><b>2.13</b> Derived indicator calculation: Compute the International dollar price and the Purchasing power parities (Plugin: Geary-Khamis)</a></li>
+<li class="chapter" data-level="2.14" data-path="Harvester.html"><a href="Harvester.html#data-dissemination-preparation-through-dissemination-domain"><i class="fa fa-check"></i><b>2.14</b> Data dissemination preparation through Dissemination domain</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="methodological-guide.html"><a href="methodological-guide.html"><i class="fa fa-check"></i><b>3</b> <strong>Methodological Guide</strong></a></li>
+<li class="chapter" data-level="4" data-path="code-and-additional-material-references.html"><a href="code-and-additional-material-references.html"><i class="fa fa-check"></i><b>4</b> <strong>Code and additional material references</strong></a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Producer prices compilation into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Harvester" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> <strong>Descritpion of each step from the user point of view</strong></h1>
+<div id="data-harvesting" class="section level2">
+<h2><span class="header-section-number">2.1</span> Data harvesting</h2>
+<p>The first step of the Producer price workflow is to launch the harvester to import the data provided by the country through questionnaires. The questionnaire must respect the template as shown in <a href="Harvester.html#fig:QuestionnaireTemplate">2.1</a>. The <strong>M49 country code</strong> must be in cell A2 of the first sheet of the Excel file (<strong>without leading zeros</strong> until further notice), product codes must follow the <strong>CPC</strong> classification, and the <strong>currency must be properly reported</strong> so that the harvester can detect any change in the currency during the period covered by the questionnaire.</p>
+<div class="figure"><span id="fig:QuestionnaireTemplate"></span>
+<img src="img/QuestionnaireTemplate.png" alt="Questionnaire template, Excel sheet 1." width="100%" />
+<p class="caption">
+Figure 2.1: Questionnaire template, Excel sheet 1.
+</p>
+</div>
+<p>The technical unit might perform preliminary checks on data before harvesting questionnaires (e.g. unit of measure consistency). Once the questionnaire Excel files are ready to be imported, they should be compressed into a .zip folder to be provided as input for the questionnaire harvester. In order to launch the questionnaire through the SWS interface refer to the pictures below (<a href="Harvester.html#fig:PPharv1">2.2</a> - <a href="Harvester.html#fig:PPharv4">2.5</a>) The first step is to click on the ‘Harvester’ button and select the harvester to run: ‘Producer Prices Annual Questionnaire Harvester’ or ‘Producer Prices Monthly Questionnaire Harvester’ (figures <a href="Harvester.html#fig:PPharv2">2.3</a> - <a href="Harvester.html#fig:PPharv2">2.3</a>).</p>
+<div class="figure"><span id="fig:PPharv1"></span>
+<img src="img/PP1.PNG" alt="Select the harvester button to see the list of available harvester." width="100%" />
+<p class="caption">
+Figure 2.2: Select the harvester button to see the list of available harvester.
+</p>
+</div>
+<div class="figure"><span id="fig:PPharv2"></span>
+<img src="img/PP2.PNG" alt="Select the harvester to launch." width="100%" />
+<p class="caption">
+Figure 2.3: Select the harvester to launch.
+</p>
+</div>
+<p>Once the harvester has been selected, click on the ‘Browse…’ button to select the .zip file containing the questionnaires, click on the ‘Launch job’ button and wait for the confirmation email reporting the successful completion of the harvester or problems that have been encountered. Should you have any problem with the harvester routine please contact CSI division (Enrico Anello initially developed the harvester).</p>
+<div class="figure"><span id="fig:PPharv3"></span>
+<img src="img/PP3.PNG" alt="Select the .zip file containing questionnaire files." width="100%" />
+<p class="caption">
+Figure 2.4: Select the .zip file containing questionnaire files.
+</p>
+</div>
+<div class="figure"><span id="fig:PPharv4"></span>
+<img src="img/PP4.PNG" alt="Launch the harvester." width="100%" />
+<p class="caption">
+Figure 2.5: Launch the harvester.
+</p>
+</div>
+<p>The data from the questionnaire are saved into the ‘Annual Producer Prices (Questionnaire)’ dataset (<a href="Harvester.html#fig:QuestWF">2.6</a>). Data expressed in Local currency unit (LCU) are saved with the flag combination (;q) or (B;q) in case there is a change in the currency and, hence, a break in the series. Please note this last step will be important for the calculation of the standard local currency (SLC) in the following steps so it is important that <strong>questionnaires report the actual currency in which prices are provided</strong>.</p>
+<div class="figure"><span id="fig:QuestWF"></span>
+<img src="img/QuestWF.jpg" alt="Questionnaire harvester workflow." width="100%" />
+<p class="caption">
+Figure 2.6: Questionnaire harvester workflow.
+</p>
+</div>
+</div>
+<div id="fromQuest2Prep" class="section level2">
+<h2><span class="header-section-number">2.2</span> Data analysis and conversion from LCU to SLC and USD (Plugin: pp_fromQuest2Prep)</h2>
+<p>The data stored in the questionnaire dataset undergo no transformation, they are imported only in LCU. The conversion both in SLC and USD takes place running the ‘<strong>pp_fromQuest2Prep</strong>’ plugin.</p>
+<p>The plugin can be run from a session of the <strong>Annual Producer Prices (Preparation)</strong> dataset as shown in figure <a href="Harvester.html#fig:runplugin11">2.7</a>. Select the ‘pp_fromQuest2Prep’ plugin from the menu (figure <a href="Harvester.html#fig:runplugin12">2.8</a>) and insert the parameters to run the plugin as in figure <a href="Harvester.html#fig:runplugin13">2.9</a>.</p>
+<p>The three parameters to insert are:</p>
+<ul>
+<li><p>the <em>questionnaire start and end years</em>, i.e. the years included in the last questionnaire round</p></li>
+<li><p>the <em>country code</em> of the countries the plugin must run for. If no country code is inserted the plugin will apply to all countries. Please note, to apply the plugin only to <em>specific countries the values inserted must be the M49 country codes</em>.</p></li>
+</ul>
+<p>After the plugin has run the Preparation dataset will have unsaved changes in the opened session. The user should save these changes through the ‘Save to dataset’ button to continue with the procedure.</p>
+<div class="figure"><span id="fig:runplugin11"></span>
+<img src="img/runplugin11.png" alt="Run plugin from Preparation dataset session." width="100%" />
+<p class="caption">
+Figure 2.7: Run plugin from Preparation dataset session.
+</p>
+</div>
+<div class="figure"><span id="fig:runplugin12"></span>
+<img src="img/runplugin12.png" alt="Choose the plugin to run." width="100%" />
+<p class="caption">
+Figure 2.8: Choose the plugin to run.
+</p>
+</div>
+<div class="figure"><span id="fig:runplugin13"></span>
+<img src="img/runplugin13.png" alt="Insert required parameters and run the plugin. As an example the plugin refers to 2020 questionnaire round where data from 2017 to 2019 were asked to countries. The two selected countries for this example are France (250) and Italy (380)" width="100%" />
+<p class="caption">
+Figure 2.9: Insert required parameters and run the plugin. As an example the plugin refers to 2020 questionnaire round where data from 2017 to 2019 were asked to countries. The two selected countries for this example are France (250) and Italy (380)
+</p>
+</div>
+<p>Once the plugin starts, the operations performed are:</p>
+<ol style="list-style-type: decimal">
+<li><p>The plugin pulls input data from: the questionnaire dataset, the exchange rates dataset and the ‘<em>lcu_2_m49</em>’ datatable to link country and currency. The exchange rates dataset contains exchange rates in the form ‘domestic currency per USD’ so that, once the two datasets are merged, the price in USD is <span class="math display">\[USD = LCU/ExchangeRate \]</span></p></li>
+<li><p>For the SLC values, if there has been no change in the currency used by the country during the last year of the questionnaire, the SLC value is just equal to the LCU value. If, on the contrary, there has been a change in currency, i.e. there is an observation flag ‘B’, then all the SLC series is adapted to the new currency, including the validated data of the previous years. The convertion is performed using the ‘<em>currency_changes</em>’ datatable. Note that the update of the datatables is responsibility of the technical unit.</p></li>
+<li><p>After these calculations and checks, the plugins compares the previous year validated data with the new data. If there is a difference between the validated data and the new questionnaire data the values are inserted into the datatable ‘revisions2control’ to be manually checked. Currently there is a tolerance level variation of 10%, if the variation is above this threshold the values are inserted into the datatable ‘revisions2control’ to be manually checked and possibly re-imported into the dataset. Without this step, all questionnaire data would automatically overwrite previous data. This step applies to data collected or imputed through questionnaire at <em>t-1</em> and <em>t-2</em>.</p></li>
+</ol>
+<p>The absolute value of the variation is checked as it follows: <span class="math display">\[|(P_{t-1} - P_{t})/P_{t}| &gt; 0.1 \]</span> where <em>t</em> refers to the year of the review of the figure.</p>
+<p>By default the new value is retained and saved into the <em>preparation dataset</em>, but there is the option to change and restore the previous value through the ‘<em>revisions2control</em>’ datatable @ref(pp_refuse_update). The data calculated by the plugin are saved into the <strong>Annual Producer Prices (Preparation)</strong> dataset.</p>
+</div>
+<div id="pp_refuse_update" class="section level2">
+<h2><span class="header-section-number">2.3</span> Data editing following the questionnaire harvester (Plugin: pp_refuse_update)</h2>
+<p>After the <em>pp_fromQuest2Prep</em> the user can check the datatable ‘<em>revisions2control</em>’. This datatable contains all latest questionnaire data that considerably differ from the previous year validated data (see previous paragraph for more details). The user can therefore compare the two values (new and validated one) and, if for any of them the revision has to be rejected, check the box in the last column ‘<em>refuse_update</em>’ see figure <a href="Harvester.html#fig:refuserev">2.10</a>.</p>
+<div class="figure"><span id="fig:refuserev"></span>
+<img src="img/refuserev.jpg" alt="Example of refused value update." width="100%" />
+<p class="caption">
+Figure 2.10: Example of refused value update.
+</p>
+</div>
+<p>Once values have been revised the user can run the <strong>pp_refuse_update</strong> plugin from the <em>preparation dataset</em> and save changes through the ‘Save to dataset’ button (<a href="Harvester.html#fig:refuserevplugin">2.11</a>). The <strong>pp_refuse_update</strong> plugin restores the previous figures in the preparation dataset in all currencies (LCU, SLC and USD).</p>
+<div class="figure"><span id="fig:refuserevplugin"></span>
+<img src="img/refuserevplugin.png" alt="Run plugin to restore validated figure over new questionnaire ones." width="100%" />
+<p class="caption">
+Figure 2.11: Run plugin to restore validated figure over new questionnaire ones.
+</p>
+</div>
+</div>
+<div id="pp_OutlierDetection" class="section level2">
+<h2><span class="header-section-number">2.4</span> Data analysis and quality control: Outlier detection (Plugin: pp_OutlierDetection)</h2>
+<p>After the data have been transferred from the Questionnaire to the Preparation dataset, and the data have been revised up to available year <em>t-1</em> (being <em>t</em> the last year available in the questionnaire) the outlier detection runs for the last available year <em>t</em>. The plugin <strong>pp_OutlierDetection</strong> identifies the outlier of the last questionnaire year applying three different methods: interquartile range (IQR) on the price level, interquartile range (IQR) on price variation, built-in in R function that applies the <em>supsmu</em> method.</p>
+<p>The outlier plugin is initiated from the <strong>Annual Producer Prices (Preparation)</strong> dataset following steps in figures <a href="Harvester.html#fig:outlier1">2.12</a> and <a href="Harvester.html#fig:outlier2">2.13</a>. As in the <em>pp_fromQuest2Prep</em> plugin the parameter ‘Countries’ can either be filled with the code(s) of the country(ies) the user want the plugin to run for or to be left blank. In this case the plugin runs for all the countries.</p>
+<div class="figure"><span id="fig:outlier1"></span>
+<img src="img/OutlierPlugin.jpg" alt="First step of the outlier plugin." width="100%" />
+<p class="caption">
+Figure 2.12: First step of the outlier plugin.
+</p>
+</div>
+<div class="figure"><span id="fig:outlier2"></span>
+<img src="img/OutlierPlugin1.jpg" alt="Second step of the outlier plugin." width="100%" />
+<p class="caption">
+Figure 2.13: Second step of the outlier plugin.
+</p>
+</div>
+<p>After the plugin as run, the outlier detected are flagged as (E;e) and saved into the datatable <em>outlier_detected</em>. Please note this datatable serve no purpose in the workflow, it only provides an overview to the user but no operation has to be performed on this datatable. After the plugin has run the data in the <strong>Annual Producer Prices (Preparation)</strong> dataset must be saved again through the button ‘Save to dataset’ and will be reviewed in the shiny application.</p>
+</div>
+<div id="data-analysis-and-quality-control-outlier-validation" class="section level2">
+<h2><span class="header-section-number">2.5</span> Data analysis and quality control: Outlier validation</h2>
+<p>The purpose of the shiny application tab ‘Outlier validation’ is to review of the output of the plugin <strong>pp_OutlierDetection</strong>. The <em>shiny application</em> can be found at the url <a href="http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/" class="uri">http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/</a>. The application is also an essential tool for the imputation validation step and for the series revision that will be explained in the following chapters.</p>
+<p>To check the detected outlier and possibly modify them, the user has to retrieve a token from the Preparation dataset session. The token is essential for the shiny to connect to the SWS and session and be able to overwrite data in a session. The token is obtained selecting the plugin ‘Get_token’ and selecting the button ‘Get debug token’ at the bottom right part of the pop-up screen <a href="Harvester.html#fig:gettoken1">2.14</a>.</p>
+<div class="figure"><span id="fig:gettoken1"></span>
+<img src="img/gettoken1.png" alt="Creation of session token." width="100%" />
+<p class="caption">
+Figure 2.14: Creation of session token.
+</p>
+</div>
+<p>Once the token is displayed on the screen (Figure <a href="Harvester.html#fig:gettoken2">2.15</a>), the user should copy it and paste it in the appropriate shiny box (fig:shinyout1).</p>
+<div class="figure"><span id="fig:gettoken2"></span>
+<img src="img/gettoken2.png" alt="Copy session token." width="100%" />
+<p class="caption">
+Figure 2.15: Copy session token.
+</p>
+</div>
+<div class="figure"><span id="fig:shinyout1"></span>
+<img src="img/shinyout1.png" alt="Paste session token and update it." width="100%" />
+<p class="caption">
+Figure 2.16: Paste session token and update it.
+</p>
+</div>
+<p>Note that the token will be valid until the session remain active in the SWS of the user. Potentially the user could use the same session for the whole process, i.e. only perform this operation once a year.</p>
+<p>After inserting the token, the user can select the country-commodity combination to review through the two buttons in figure <a href="Harvester.html#fig:shinyout2">2.17</a>. Note that the two button only propose to the user country and commodities for which outliers have been detected.</p>
+<div class="figure"><span id="fig:shinyout2"></span>
+<img src="img/shinyout2.png" alt="Selection of an outlier to review" width="100%" />
+<p class="caption">
+Figure 2.17: Selection of an outlier to review
+</p>
+</div>
+<p>The user can now check the detected outlier and either classify it as ‘Normal’ figure or as an ‘Outlier’ <a href="Harvester.html#fig:shinyout3">2.18</a>.</p>
+<div class="figure"><span id="fig:shinyout3"></span>
+<img src="img/shinyout3.png" alt="Shiny app outlier review upper screen with validation buttons 'Normal' and 'Outlier'." width="100%" />
+<p class="caption">
+Figure 2.18: Shiny app outlier review upper screen with validation buttons ‘Normal’ and ‘Outlier’.
+</p>
+</div>
+<p>Along with the information on the single series in SLC (default series shown) the user can choose to visualize the series in USD and also has additional information shown in the table at the bottom of the page (figure <a href="Harvester.html#fig:shinyout4">2.19</a>).</p>
+<p>The use has as additional information: - price value and variation for all commodities in the selected country - prices of the selected commodity in other countries sortable by variables: region, sub-region, year, currency type</p>
+<div class="figure"><span id="fig:shinyout4"></span>
+<img src="img/shinyout4.png" alt="Shiny app outlier review upper screen with additional information and outlier manual value insertion." width="100%" />
+<p class="caption">
+Figure 2.19: Shiny app outlier review upper screen with additional information and outlier manual value insertion.
+</p>
+</div>
+<p>If the value is acknowledged as an outlier (red button) the the user can choose either to leave the value blank and to let it imputed by the plugin or to manually impute a value in the box ‘Manual input’ that appears when the user choose the ‘Outlier’ option. When the user clicks the ‘Impute’ button the value is updated either with a blank or with the inserted value. If, instead the value is not ackowledged as an outlier (green button ‘Normal’) no more action is needed.</p>
+<p>From time to time or before the user wants to interrupt the revision process, the work must be saved back into SWS not to loose the progress. This is done through the ‘Save in SWS’ button at the top of the shiny tab.</p>
+<p>In case none of the values detected as outlier is ackowledged as one, there is the sub-tab ‘Bulk acceptance’ through which the user can accept all the values for a selected country (figure <a href="#fig:shinyoutbulk"><strong>??</strong></a>)</p>
+<div class="figure">
+<img src="img/shinyoutbulk.png" alt="Shiny app bulk acceptance." width="100%" />
+<p class="caption">
+(#fig:shinyoutbulk)Shiny app bulk acceptance.
+</p>
+</div>
+</div>
+<div id="Imputation" class="section level2">
+<h2><span class="header-section-number">2.6</span> Missing data imputation and interpolation</h2>
+<p>After the outlier have been reviewed either for one or for all countries, the missing data imputation can be performed. The imputation of missing data first happens in the SWS via plugin and it is then assessed via shiny app. The SWS plugin called ‘PP_imputationMethods’ estimates missing data according to six different methods and save the results in the ‘imputation_annual_prices’ datatable (Figure <a href="Harvester.html#fig:impDT">2.21</a>). This same plugin also performs interpolation for series where the last value is an official value precedeed by an estimation. The interpolation is calculated between two official figures and it is also presented in the shiny app to be validated by the user.</p>
+<p>The ‘PP_imputationMethods’ plugin runs from the ‘Annual Producer Prices (Preparation)’ dataset and only has an optional country parameter as input equal to the one in the previous plugins. Through the country parameter, the user can select to run the imputation for one or a subset of countries, otherwise the plugin runs for all countries by default (Figure <a href="Harvester.html#fig:ImpPlugin1">2.20</a>).</p>
+<div class="figure"><span id="fig:ImpPlugin1"></span>
+<img src="img/ImpPlugin1.png" alt="How to run the PP_imputationMethods plugin from SWS interface." width="100%" />
+<p class="caption">
+Figure 2.20: How to run the PP_imputationMethods plugin from SWS interface.
+</p>
+</div>
+<p>When the plugin runs, it considers SLC series and completes the series where the last questionnaire year is missing according to the following methodologies: ARIMAX, Ensemble approach, Linear model, Commodity group approach, Consumer Price Index (CPI) based approach and Price ratio approach.</p>
+<p>The plugin stores the imputaiton results according to the different methods into the ‘imputation_annual_prices’ datatable and the interpolation results into the ‘interpolation_annual_prices’ datatable figures <a href="#fig:impDT1"><strong>??</strong></a> and <a href="Harvester.html#fig:impDT2">2.22</a>.</p>
+<div class="figure"><span id="fig:impDT"></span>
+<img src="img/ImpDT.PNG" alt="Datatable compiled by the _PP_imputationMethods_ plugin for Burundi (M49 code 108) commodities wheat and maize (CPC code respectively 0111 and 0112)." width="100%" />
+<p class="caption">
+Figure 2.21: Datatable compiled by the <em>PP_imputationMethods</em> plugin for Burundi (M49 code 108) commodities wheat and maize (CPC code respectively 0111 and 0112).
+</p>
+</div>
+<div class="figure"><span id="fig:impDT2"></span>
+<img src="img/ImpDT2.PNG" alt="Datatable compiled by the _PP_imputationMethods_ plugin for Burundi (M49 code 108) commodities wheat and maize (CPC code respectively 0111 and 0112)." width="100%" />
+<p class="caption">
+Figure 2.22: Datatable compiled by the <em>PP_imputationMethods</em> plugin for Burundi (M49 code 108) commodities wheat and maize (CPC code respectively 0111 and 0112).
+</p>
+</div>
+<p>Neither of the two datatables should be reviewed by the user directly in the SWS, all operations are to be performed in the shiny application.</p>
+</div>
+<div id="missing-data-imputation-control-and-validation" class="section level2">
+<h2><span class="header-section-number">2.7</span> Missing data imputation control and validation</h2>
+<p>The tab ‘Missing data imputation’ of the shiny application is dedicated to the review and the choice of the value to impute to missing values. The structure is similar to the ‘Outlier validation’ tab. The shiny automatically provides in the ‘Country to review’ box the list of country and in the ‘Product to review’ box the product that need imputation (figure <a href="Harvester.html#fig:shinyImp1">2.23</a>).</p>
+<div class="figure"><span id="fig:shinyImp1"></span>
+<img src="img/shinyImp1.png" alt="Selection of country and commodity." width="100%" />
+<p class="caption">
+Figure 2.23: Selection of country and commodity.
+</p>
+</div>
+<p>Once the user select the series the sub-tab ‘Plugin results’ shows the graph with the series up to ‘t-1’ and, in different colors, the values estimated at time ‘t’ according to the different methods. Each point of the time series has attached metadata the user can check by pointing to each point in the graph. On the right side the series with the annual growth rate is displayed in SLC. A table with additional information is also available at the bottom of the tab (figure <a href="Harvester.html#fig:shinyImp2">2.24</a>). The table shows all prices for the selected countries and all the prices for the selected commodity across the world. The user can sort and filter data according to the different variables displyed (same as in the Outlier tab).</p>
+<div class="figure"><span id="fig:shinyImp2"></span>
+<img src="img/shinyImp2.png" alt="Shiny app validation of imputation additional information." width="100%" />
+<p class="caption">
+Figure 2.24: Shiny app validation of imputation additional information.
+</p>
+</div>
+<p>To impute the chosen value the user must select the value in the blue list of approaches and validate the choice with the green button ‘Validate’. If none of the approaches proposed is satisfactory the user can click the red button ‘Refuse’, insert a manual value and ‘Impute’ it through the button (figure <a href="Harvester.html#fig:shinyImp3">2.25</a>).</p>
+<div class="figure"><span id="fig:shinyImp3"></span>
+<img src="img/shinyImp3.png" alt="Shiny app manual imputation." width="100%" />
+<p class="caption">
+Figure 2.25: Shiny app manual imputation.
+</p>
+</div>
+<p>If all or a group of products has to be imputed with the same approach ‘as a bulk’, the ‘Bulk imputation’ sub-tab where the user selects what series to impute with the same approach. As shown in figure <a href="Harvester.html#fig:shinyBulk1">2.26</a> the user selects the country, the commodity group(s) and the method to use. Then click the green button ‘Validate’ to save the change into SWS.</p>
+<div class="figure"><span id="fig:shinyBulk1"></span>
+<img src="img/shinyBulk1.png" alt="Shiny app bulk imputation tab." width="100%" />
+<p class="caption">
+Figure 2.26: Shiny app bulk imputation tab.
+</p>
+</div>
+</div>
+<div id="interpolation-control-and-validation" class="section level2">
+<h2><span class="header-section-number">2.8</span> Interpolation control and validation</h2>
+<p>With the same structure of imputation tab there is the ‘Interpolation’ tab where the user can look all the series for which an interpolation has been made by the plugin. The list therefore includes all series that have an official value at the latest year ‘t’ but have imputed data at time ‘t-1’. In this way the user can review the previous imputation and check if it is in line with the latest official data. Depending on the expert assessment, the interpolation proposed by the plugin can be accepted (green button) or refused (red button). Each assessment is saved into SWS and will be transferred to the dataset at the end of the process.</p>
+<div class="figure"><span id="fig:shinyInterp"></span>
+<img src="img/shinyInterp.png" alt="Shiny app interpolation tab." width="100%" />
+<p class="caption">
+Figure 2.27: Shiny app interpolation tab.
+</p>
+</div>
+</div>
+<div id="data-analysis-and-series-revision" class="section level2">
+<h2><span class="header-section-number">2.9</span> Data analysis and series revision</h2>
+<p>In case there is need of a broader revision of the series, the ‘Series revision’ tab is available. Here the user needs to select manually the series to visualize (country, start year, end year and commodity). Since this imputation is performed directly in the shiny application and the new values need to be overwritten directly in the ‘Annual Producer Prices (Preparation)’ dataset dataset, please make sure of which session the shiny is connected to. It should be the same as the one selected for the outlier validation. The shiny app will write on the session selected. Once the series is selected, imputation according all the available methods is displayed in the graphs of the page. As in the ‘Missing data imputation’ tab, the user can select the approach to impute and ‘Validate’ the series (figure <a href="Harvester.html#fig:shinySeries1">2.28</a>). This part of the shiny writes directly on the SWS dataset ‘Annual Producer Prices (Preparation)’, therefore after completing the work in the shiny all changes must be saved into the corresponding SWS session to save the changes through the ‘Save to dataset’ button.</p>
+<div class="figure"><span id="fig:shinySeries1"></span>
+<img src="img/shinySeries1.png" alt="Shiny app series revision tab." width="100%" />
+<p class="caption">
+Figure 2.28: Shiny app series revision tab.
+</p>
+</div>
+</div>
+<div id="validateimputation" class="section level2">
+<h2><span class="header-section-number">2.10</span> Dataset validation (Plugin: pp_save_validated_data)</h2>
+<p>The validation of the imputation process from the shiny app involves only a modification in the datatable ‘imputation_annual_prices’ and ‘interpolation_annual_prices’. In order to transfer the choices to the ‘Annual Producer Prices (Preparation)’ dataset and complete the workflow, the plugin ‘pp_save_validated_data’ must run. From the session of the dataset ‘Annual Producer Prices (Preparation)’ used by the shiny app, the user can run the plugin as described in figure @ref(fig:save_valid_data). No manual parameter is required.</p>
+<div class="figure">
+<img src="img/save_valid_data.png" alt="Run 'pp_save_validated_data' plugin." width="100%" />
+<p class="caption">
+(#fig:save_valid_data)Run ‘pp_save_validated_data’ plugin.
+</p>
+</div>
+<p>The plugin reads from the imputation and interpolation datatables, it assigns the appropriate flag depending on the chosen estimation approach and attach metadata to each figure about the approach. Because all the imputation is performed considering prices in SLC, the plugin also converts values in LCU and USD. The approach is the same as the one in ‘pp_fromQuest2Prep’ plugin.</p>
+</div>
+<div id="final-data-validation-and-output-transfer" class="section level2">
+<h2><span class="header-section-number">2.11</span> Final data validation and output transfer</h2>
+<p>The ‘Annual Producer Prices (Preparation)’ is a working dataset where the history will contain all the revisions made throughout the workflow, including provisional revisions not useful to keep as record. For this reason once all the operation of outlier detection and data imputation are complete the dataset can be transfered to the validated dataset. In order to create and transfer a tag follow the instruciton in the figures below (<a href="Harvester.html#fig:tag1">2.29</a>, <a href="Harvester.html#fig:tag2">2.30</a>).</p>
+<div class="figure"><span id="fig:tag1"></span>
+<img src="img/Tag1.PNG" alt="Tag creation step 1. Dimension selection." width="100%" />
+<p class="caption">
+Figure 2.29: Tag creation step 1. Dimension selection.
+</p>
+</div>
+<div class="figure"><span id="fig:tag2"></span>
+<img src="img/Tag2.PNG" alt="Tag creation step 2. Name the tag" width="100%" />
+<p class="caption">
+Figure 2.30: Tag creation step 2. Name the tag
+</p>
+</div>
+<p>After the tag has been saved, it will appear in the list of tags on the left part of the SWS interface <a href="Harvester.html#fig:tag3">2.31</a></p>
+<div class="figure"><span id="fig:tag3"></span>
+<img src="img/Tag3.PNG" alt="Tag creation step 3. List of tags" width="100%" />
+<p class="caption">
+Figure 2.31: Tag creation step 3. List of tags
+</p>
+</div>
+<p>In order to transfer the tag to another dataset right click on the tag of interest and select ‘Export to dataset’, a window will open where the user can select the domain and the destionation dataset the tag has to be exported to (figures (<a href="Harvester.html#fig:tag4">2.32</a>, (<a href="Harvester.html#fig:tag5">2.33</a>).</p>
+<div class="figure"><span id="fig:tag4"></span>
+<img src="img/Tag3bis.PNG" alt="Tag creation step 3. List of tags" width="100%" />
+<p class="caption">
+Figure 2.32: Tag creation step 3. List of tags
+</p>
+</div>
+<div class="figure"><span id="fig:tag5"></span>
+<img src="img/Tag3tris.PNG" alt="Tag creation step 3. List of tags" width="100%" />
+<p class="caption">
+Figure 2.33: Tag creation step 3. List of tags
+</p>
+</div>
+<p>When the operation is concluded the data will appear in the new validated dataset.</p>
+</div>
+<div id="derived-indicator-calculation-ppis-plugin-producer-price-indices-ppi" class="section level2">
+<h2><span class="header-section-number">2.12</span> Derived indicator calculation: PPIs (Plugin: Producer Price Indices (PPI))</h2>
+<p>After the Producer prices data process is complete the Producer Price Indices can be calculated. From a session of the ‘Annual Producer Prices (Validated)’ dataset run the plugin <strong>Producer Price Indices (PPI)</strong> (figures <a href="Harvester.html#fig:ppi1">2.34</a> and <a href="Harvester.html#fig:ppi2">2.35</a>).</p>
+<p>The parameters required are: 1. the base year to use 2. the starting year for which calculate the PPIs 3. the last year available PPI must be calculated for</p>
+<div class="figure"><span id="fig:ppi1"></span>
+<img src="img/PPI1.PNG" alt="Tag creation step 3. List of tags" width="100%" />
+<p class="caption">
+Figure 2.34: Tag creation step 3. List of tags
+</p>
+</div>
+<div class="figure"><span id="fig:ppi2"></span>
+<img src="img/PPI2.PNG" alt="Tag creation step 3. Export tag." width="100%" />
+<p class="caption">
+Figure 2.35: Tag creation step 3. Export tag.
+</p>
+</div>
+<p>Once the plugin runs, the PPIs can be saved into the dataset through the button ‘Save to dataset’.</p>
+</div>
+<div id="derived-indicator-calculation-compute-the-international-dollar-price-and-the-purchasing-power-parities-plugin-geary-khamis" class="section level2">
+<h2><span class="header-section-number">2.13</span> Derived indicator calculation: Compute the International dollar price and the Purchasing power parities (Plugin: Geary-Khamis)</h2>
+<p>Depending on the dataset the plugin is run from, the result will be either the International Dollar price or the Purchasing Power parity for the selected country. To run the plugin, open a session either for the ‘Purchasing Power Parities’ dataset or for the ‘International Dollar Prices’ and run the plgin filling in the parameters as in figure <a href="Harvester.html#fig:gk1">2.36</a>. The parameters are the same as in the PPI plugin plus the code of the selected country.</p>
+<div class="figure"><span id="fig:gk1"></span>
+<img src="img/Geary-Khamis1.png" alt="Tag creation step 3. List of tags" width="100%" />
+<p class="caption">
+Figure 2.36: Tag creation step 3. List of tags
+</p>
+</div>
+</div>
+<div id="data-dissemination-preparation-through-dissemination-domain" class="section level2">
+<h2><span class="header-section-number">2.14</span> Data dissemination preparation through Dissemination domain</h2>
+<p>Once all the data have been calculated and validated it is possible to tag all the data as described in the previous paragraph and tranfer the tags to the Dissemination domain respectively for Dissemination in FAOSTAT.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="user-guide.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="methodological-guide.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
