@@ -26,7 +26,7 @@
 <meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2021-10-03">
+<meta name="date" content="2021-10-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -80,6 +80,7 @@
 </ul></li>
 <li class="chapter" data-level="1" data-path="user-guide.html"><a href="user-guide.html"><i class="fa fa-check"></i><b>1</b> <strong>User Guide</strong></a></li>
 <li class="chapter" data-level="2" data-path="methodological-guide.html"><a href="methodological-guide.html"><i class="fa fa-check"></i><b>2</b> <strong>Methodological Guide</strong></a></li>
+<li class="chapter" data-level="3" data-path="code-documentation.html"><a href="code-documentation.html"><i class="fa fa-check"></i><b>3</b> <strong>Code documentation</strong></a></li>
 </ul>
 
       </nav>
@@ -100,7 +101,7 @@
 <div id="header">
 <h1 class="title">Migration of Producer prices compilation into the SWS</h1>
 <h4 class="author"><em>Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)</em></h4>
-<h4 class="date"><em>2021-10-03</em></h4>
+<h4 class="date"><em>2021-10-11</em></h4>
 </div>
 <div id="introduction" class="section level1 unnumbered">
 <h1><strong>Introduction</strong></h1>
@@ -123,14 +124,14 @@
 <li><strong>Claudio Valeri</strong> <em>Statistical clerk, ESSD</em></li>
 </ul>
 <ol start="2" style="list-style-type: decimal">
-<li>The <strong>ESS - Methodological Innovation Team</strong> (ESS - SWS) responsible for the implementation and documentation of the required statistical processes. From the ESS - SWS team the focal points for FIAS - SWS process migration are:</li>
+<li>The <strong>ESS - Methodological Innovation Team</strong> (ESS - SWS) responsible for the implementation and documentation of the required statistical processes. From the ESS - SWS team the focal points for SWS process migration are:</li>
 </ol>
 <ul>
 <li><strong>Carola Fabi</strong> <em>Senior Statistician and team leader (ESSD)</em></li>
 <li><strong>Charlotte Taglioni</strong> <em>Statistician (ESSD)</em></li>
 </ul>
 <ol start="3" style="list-style-type: decimal">
-<li>The <strong>CSI - SWS</strong> the <strong>primary backend and frontend maintainer of the SWS</strong> and responsible for the implementation and documentation of non-statistical processes (IT infrastructure). The CIO - SWS team have as interlocutors:</li>
+<li>The <strong>CSI - SWS</strong> the <strong>primary backend and frontend maintainer of the SWS</strong> and responsible for the implementation and documentation of non-statistical processes (IT infrastructure). The CSI - SWS team have as interlocutors:</li>
 </ol>
 <ul>
 <li><strong>John Rowell</strong> <em>Information Technology Officer (CSI)</em></li>
@@ -194,39 +195,38 @@ Figure .: General workflow.
 <h3>Data tables</h3>
 <p>Data tables are mainly used to store information helping R modules to output analytic results. Information in data tables can be of a number of types and, especially when they are used for mapping purposes, they have to be regularly checked and updated.</p>
 <ul>
-<li><p><strong>currency_changes</strong> (SWS identifier: <code>currency_changes</code>)</p></li>
-<li><p><strong>currency_country_years</strong> (SWS identifier: <code>currency_country_years</code>)</p></li>
-<li><p><strong>currency_dates</strong> (SWS identifier: <code>currency_dates</code>)</p></li>
-<li><p><strong>imputation_annual_prices</strong> (SWS identifier: <code>imputation_annual_prices</code>)</p></li>
-<li><p><strong>interpolation_annual_prices</strong> (SWS identifier: <code>interpolation_annual_prices</code>)</p></li>
-<li><p><strong>lcu_2_m49</strong> (SWS identifier: <code>lcu_2_m49</code>)</p></li>
-<li><p><strong>List of countries - Geary-Khamis</strong> (SWS identifier: <code>country_list_for_gk</code>)</p></li>
-<li><p><strong>List of inputs/outputs for GK</strong> (SWS identifier: <code>input_output_item_gk</code>)</p></li>
-<li><p><strong>List of items - Geary-Khamis</strong> (SWS identifier: <code>item_list_for_gk</code>)</p></li>
-<li><p><strong>Mapping table from Input System flag to SWS</strong> (SWS identifier: <code>mapping_input_system_flag_2_sws</code>)</p></li>
-<li><p><strong>method_flag_link</strong> (SWS identifier: <code>method_flag_link</code>)</p></li>
-<li><p><strong>outlier_detected</strong> (SWS identifier: <code>outlier_detected</code>)</p></li>
-<li><p><strong>pp_obsolete_codes_legacy</strong> (SWS identifier: <code>pp_obsolete_codes_legacy</code>)</p></li>
-<li><p><strong>pp_token</strong> (SWS identifier: <code>pp_token</code>)</p></li>
-<li><p><strong>Price Ratio (by country)</strong> (SWS identifier: <code>pp_tcf</code>)</p></li>
-<li><p><strong>revisions2control</strong> (SWS identifier: <code>revisions2control</code>)</p></li>
-<li><p><strong>toi_data</strong> (SWS identifier: <code>toi_data</code>)</p></li>
+<li><p><strong>currency_changes</strong> (SWS identifier: <code>currency_changes</code>): contains the conversion rate when a change of currency occurs. The table only contains the new and old currency codes and the conversion rate.</p></li>
+<li><p><strong>currency_country_years</strong> (SWS identifier: <code>currency_country_years</code>): previously contained in the ECO team input system, the table contains the currency codes with their correspondent countries, start and end dates. Active currencies are identified with the active flag column.</p></li>
+<li><p><strong>currency_dates</strong> (SWS identifier: <code>currency_dates</code>): previously contained in the ECO team input system, the table contains the code, the name, start and end dates of currencies, along with the active flag column.</p></li>
+<li><p><strong>imputation_annual_prices</strong> (SWS identifier: <code>imputation_annual_prices</code>): contains the estimates according to different methodologies to be validated through the shiny app.</p></li>
+<li><p><strong>interpolation_annual_prices</strong> (SWS identifier: <code>interpolation_annual_prices</code>): contains the interpolation performed to propose a new imputation for series with new official reported data.</p></li>
+<li><p><strong>lcu_2_m49</strong> (SWS identifier: <code>lcu_2_m49</code>): contains noth country and currency codes, names, start and end dates.</p></li>
+<li><p><strong>List of countries - Geary-Khamis</strong> (SWS identifier: <code>country_list_for_gk</code>): contains M49-FAO code correspondencies with country names, used for Geary-Khamis calculations.</p></li>
+<li><p><strong>List of inputs/outputs for GK</strong> (SWS identifier: <code>input_output_item_gk</code>): contains technical conversion factors for meat products, used for Geary-Khamis calculations</p></li>
+<li><p><strong>List of items - Geary-Khamis</strong> (SWS identifier: <code>item_list_for_gk</code>): contains CPC-FCL code correspondencies with priduct names, used for Geary-Khamis calculations.</p></li>
+<li><p><strong>Mapping table from Input System flag to SWS</strong> (SWS identifier: <code>mapping_input_system_flag_2_sws</code>): contains the mapping from the previous to the current SDMX standard</p></li>
+<li><p><strong>method_flag_link</strong> (SWS identifier: <code>method_flag_link</code>): contains the list of flag used for the different imputation approach used.</p></li>
+<li><p><strong>outlier_detected</strong> (SWS identifier: <code>outlier_detected</code>): lists the detected outlier reporting country, product, year and the SLC value of the outlier.</p></li>
+<li><p><strong>pp_obsolete_codes_legacy</strong> (SWS identifier: <code>pp_obsolete_codes_legacy</code>): contains the data for products that were in the previous input system not in use anymore.</p></li>
+<li><p><strong>pp_token</strong> (SWS identifier: <code>pp_token</code>): used to save token from the shiny app in order to connect to the right session.</p></li>
+<li><p><strong>Price Ratio (by country)</strong> (SWS identifier: <code>pp_tcf</code>): list of price ratio available for products by country.</p></li>
+<li><p><strong>revisions2control</strong> (SWS identifier: <code>revisions2control</code>): contains the list of figure overwritten by the questionnaire data. It is a ‘security tool’ so that the technical unit is aware of previous years data editing coming from questionnaire.</p></li>
+<li><p><strong>toi_data</strong> (SWS identifier: <code>toi_data</code>): trade openness index datatable to be updated yearly.</p></li>
 </ul>
 </div>
 <div id="datasets" class="section level3 unnumbered">
 <h3>Datasets</h3>
 <ul>
-<li><p><strong>Annual Producer Prices (Legacy ARIMAX)</strong> (SWS identifier: <code>annual_producer_prices_legacy_arimax</code>)</p></li>
-<li><p><strong>Annual Producer Prices (Legacy)</strong> (SWS identifier: <code>annual_producer_prices_legacy</code>)</p></li>
-<li><p><strong>Annual Producer Prices (Preparation)</strong> (SWS identifier: <code>annual_producer_prices_prep</code>)</p></li>
-<li><p><strong>Annual Producer Prices (Questionnaire)</strong> (SWS identifier: <code>annual_producer_prices_quest</code>)</p></li>
-<li><p><strong>Annual Producer Prices (Validated)</strong> (SWS identifier: <code>annual_producer_prices_validation</code>)</p></li>
-<li><p><strong>Consumer Price Indices</strong> (SWS identifier: <code>consumer_price_indices</code>)</p></li>
-<li><p><strong>International Dollar Prices</strong> (SWS identifier: <code>international_dollar_prices</code>)</p></li>
-<li><p><strong>Monthly Producer Prices (Legacy)</strong> (SWS identifier: <code>monthly_producer_prices_legacy</code>)</p></li>
-<li><p><strong>Monthly Producer Prices (Questionnaire)</strong> (SWS identifier: <code>monthly_producer_prices_quest</code>)</p></li>
-<li><p><strong>Monthly Producer Prices (Validated)</strong> (SWS identifier: <code>monthly_producer_prices_prep</code>)</p></li>
-<li><p><strong>Purchasing Power Parities</strong> (SWS identifier: <code>purchasing_power_parities</code>)</p></li>
+<li><p><strong>Annual Producer Prices (Legacy ARIMAX)</strong> (SWS identifier: <code>annual_producer_prices_legacy_arimax</code>): data containing the 2021 ARIMAX series revision performed outside the previous input system and the SWS.</p></li>
+<li><p><strong>Annual Producer Prices (Legacy)</strong> (SWS identifier: <code>annual_producer_prices_legacy</code>): contains the historical and current annual data contained in the previous input system.</p></li>
+<li><p><strong>Annual Producer Prices (Questionnaire)</strong> (SWS identifier: <code>annual_producer_prices_quest</code>): dataset where qustionnaire data are first ingested through the harvester.</p></li>
+<li><p><strong>Annual Producer Prices (Preparation)</strong> (SWS identifier: <code>annual_producer_prices_prep</code>): the working dataset where outlier detection and missing data imputations is performed. A working dataset is needed to avoid corruption of the history of the validated dataset.</p></li>
+<li><p><strong>Annual Producer Prices (Validated)</strong> (SWS identifier: <code>annual_producer_prices_validation</code>): dataset containing data validated after the data editing and imputation.</p></li>
+<li><p><strong>Consumer Price Indices</strong> (SWS identifier: <code>consumer_price_indices</code>): contains the consumer price data. This dataset has to be manually updated by the technical unit and it is used for the producer prices imputation.</p></li>
+<li><p><strong>International Dollar Prices</strong> (SWS identifier: <code>international_dollar_prices</code>): contains calculated international dollar price, the dataset is populated running the Geary-Khamis plugin.</p></li>
+<li><p><strong>Purchasing Power Parities</strong> (SWS identifier: <code>purchasing_power_parities</code>): contains calculated purchasing power parities, the dataset is populated running the Geary-Khamis plugin.</p></li>
+<li><p><strong>Monthly Producer Prices (Legacy)</strong> (SWS identifier: <code>monthly_producer_prices_legacy</code>): contains the historical and current monthly data contained in the previous input system.</p></li>
+<li><p><strong>Monthly Producer Prices (Questionnaire)</strong> (SWS identifier: <code>monthly_producer_prices_quest</code>): contains the monthly data loaded through the harvester.</p></li>
 </ul>
 </div>
 <div id="elements-description" class="section level3 unnumbered">
@@ -258,7 +258,7 @@ Figure .: General workflow.
 <thead>
 <tr class="header">
 <th align="left"><strong>FLAG description</strong></th>
-<th align="left"><strong>Current FIAS flag</strong></th>
+<th align="left"><strong>Current ECO team flag</strong></th>
 <th align="left"><strong>FlagObservationStatus</strong></th>
 <th align="left"><strong>FlagMethod</strong></th>
 </tr>
