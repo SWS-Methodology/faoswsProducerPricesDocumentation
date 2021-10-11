@@ -32,12 +32,12 @@ Any migration into the SWS requires the interaction between at least three actor
 - **Michele Vollaro** *Economist and statistician, ESSD*
 - **Claudio Valeri** *Statistical clerk, ESSD*
  
-2. The **ESS - Methodological Innovation Team** (ESS - SWS) responsible for the implementation and documentation of the required statistical processes. From the ESS - SWS team the focal points for FIAS - SWS process migration are:
+2. The **ESS - Methodological Innovation Team** (ESS - SWS) responsible for the implementation and documentation of the required statistical processes. From the ESS - SWS team the focal points for SWS process migration are:
 
 - **Carola Fabi** *Senior Statistician and team leader (ESSD)*
 - **Charlotte Taglioni** *Statistician (ESSD)*
 
-3. The **CSI - SWS** the **primary backend and frontend maintainer of the SWS** and responsible for the implementation and documentation of non-statistical processes (IT infrastructure). The CIO - SWS team have as interlocutors:
+3. The **CSI - SWS** the **primary backend and frontend maintainer of the SWS** and responsible for the implementation and documentation of non-statistical processes (IT infrastructure). The CSI - SWS team have as interlocutors:
 
 - **John Rowell** *Information Technology Officer (CSI)*
 - **Enrico Anello** *Full Stack Developer (CSI)*
@@ -125,65 +125,64 @@ Along with the new methodology, also the main standards and classifications used
 Data tables are mainly used to store information helping R modules to output analytic results. Information in data tables can be of a number of types and, especially when they are used for mapping purposes, they have to be regularly checked and updated.
 
 
-- **currency_changes** (SWS identifier: `currency_changes`) 
+- **currency_changes** (SWS identifier: `currency_changes`): contains the conversion rate when a change of currency occurs. The table only contains the new and old currency codes and the conversion rate.
 
-- **currency_country_years** (SWS identifier: `currency_country_years`) 
+- **currency_country_years** (SWS identifier: `currency_country_years`): previously contained in the ECO team input system, the table contains the currency codes with their correspondent countries, start and end dates. Active currencies are identified with the active flag column.
 
-- **currency_dates** (SWS identifier: `currency_dates`) 
+- **currency_dates** (SWS identifier: `currency_dates`): previously contained in the ECO team input system, the table contains the code, the name, start and end dates of currencies, along with the active flag column.
 
-- **imputation_annual_prices** (SWS identifier: `imputation_annual_prices`) 
+- **imputation_annual_prices** (SWS identifier: `imputation_annual_prices`): contains the estimates according to different methodologies to be validated through the shiny app.
 
-- **interpolation_annual_prices** (SWS identifier: `interpolation_annual_prices`) 
+- **interpolation_annual_prices** (SWS identifier: `interpolation_annual_prices`): contains the interpolation performed to propose a new imputation for series with new official reported data.
 
-- **lcu_2_m49** (SWS identifier: `lcu_2_m49`) 
+- **lcu_2_m49** (SWS identifier: `lcu_2_m49`): contains noth country and currency codes, names, start and end dates.
 
-- **List of countries - Geary-Khamis** (SWS identifier: `country_list_for_gk`) 
+- **List of countries - Geary-Khamis** (SWS identifier: `country_list_for_gk`): contains M49-FAO code correspondencies with country names, used for Geary-Khamis calculations.
 
-- **List of inputs/outputs for GK** (SWS identifier: `input_output_item_gk`) 
+- **List of inputs/outputs for GK** (SWS identifier: `input_output_item_gk`): contains technical conversion factors for meat products, used for Geary-Khamis calculations
 
-- **List of items - Geary-Khamis** (SWS identifier: `item_list_for_gk`) 
+- **List of items - Geary-Khamis** (SWS identifier: `item_list_for_gk`): contains CPC-FCL code correspondencies with priduct names, used for Geary-Khamis calculations.
 
-- **Mapping table from Input System flag to SWS** (SWS identifier: `mapping_input_system_flag_2_sws`) 
+- **Mapping table from Input System flag to SWS** (SWS identifier: `mapping_input_system_flag_2_sws`): contains the mapping from the previous to the current SDMX standard
 
-- **method_flag_link** (SWS identifier: `method_flag_link`) 
+- **method_flag_link** (SWS identifier: `method_flag_link`): contains the list of flag used for the different imputation approach used.
 
-- **outlier_detected** (SWS identifier: `outlier_detected`) 
+- **outlier_detected** (SWS identifier: `outlier_detected`): lists the detected outlier reporting country, product, year and the SLC value of the outlier.
 
-- **pp_obsolete_codes_legacy** (SWS identifier: `pp_obsolete_codes_legacy`) 
+- **pp_obsolete_codes_legacy** (SWS identifier: `pp_obsolete_codes_legacy`): contains the data for products that were in the previous input system not in use anymore.
 
-- **pp_token** (SWS identifier: `pp_token`) 
+- **pp_token** (SWS identifier: `pp_token`): used to save token from the shiny app in order to connect to the right session.
 
-- **Price Ratio (by country)** (SWS identifier: `pp_tcf`) 
+- **Price Ratio (by country)** (SWS identifier: `pp_tcf`): list of price ratio available for products by country.
 
-- **revisions2control** (SWS identifier: `revisions2control`) 
+- **revisions2control** (SWS identifier: `revisions2control`): contains the list of figure overwritten by the questionnaire data. It is a 'security tool' so that the technical unit is aware of previous years data editing coming from questionnaire.
 
-- **toi_data** (SWS identifier: `toi_data`) 
+- **toi_data** (SWS identifier: `toi_data`): trade openness index datatable to be updated yearly. 
 
 
 ### Datasets {-}
 
 
-- **Annual Producer Prices (Legacy ARIMAX)** (SWS identifier: `annual_producer_prices_legacy_arimax`) 
+- **Annual Producer Prices (Legacy ARIMAX)** (SWS identifier: `annual_producer_prices_legacy_arimax`): data containing the 2021 ARIMAX series revision performed outside the previous input system and the SWS.
 
-- **Annual Producer Prices (Legacy)** (SWS identifier: `annual_producer_prices_legacy`) 
+- **Annual Producer Prices (Legacy)** (SWS identifier: `annual_producer_prices_legacy`): contains the historical and current annual data contained in the previous input system.
 
-- **Annual Producer Prices (Preparation)** (SWS identifier: `annual_producer_prices_prep`) 
+- **Annual Producer Prices (Questionnaire)** (SWS identifier: `annual_producer_prices_quest`): dataset where qustionnaire data are first ingested through the harvester.
 
-- **Annual Producer Prices (Questionnaire)** (SWS identifier: `annual_producer_prices_quest`) 
+- **Annual Producer Prices (Preparation)** (SWS identifier: `annual_producer_prices_prep`): the working dataset where outlier detection and missing data imputations is performed. A working dataset is needed to avoid corruption of the history of the validated dataset. 
 
-- **Annual Producer Prices (Validated)** (SWS identifier: `annual_producer_prices_validation`) 
+- **Annual Producer Prices (Validated)** (SWS identifier: `annual_producer_prices_validation`): dataset containing data validated after the data editing and imputation.
 
-- **Consumer Price Indices** (SWS identifier: `consumer_price_indices`)
+- **Consumer Price Indices** (SWS identifier: `consumer_price_indices`): contains the consumer price data. This dataset has to be manually updated by the technical unit and it is used for the producer prices imputation.
 
-- **International Dollar Prices** (SWS identifier: `international_dollar_prices`) 
+- **International Dollar Prices** (SWS identifier: `international_dollar_prices`): contains calculated international dollar price, the dataset is populated running the Geary-Khamis plugin.
 
-- **Monthly Producer Prices (Legacy)** (SWS identifier: `monthly_producer_prices_legacy`) 
+- **Purchasing Power Parities** (SWS identifier: `purchasing_power_parities`): contains calculated purchasing power parities, the dataset is populated running the Geary-Khamis plugin. 
 
-- **Monthly Producer Prices (Questionnaire)** (SWS identifier: `monthly_producer_prices_quest`) 
+- **Monthly Producer Prices (Legacy)** (SWS identifier: `monthly_producer_prices_legacy`): contains the historical and current monthly data contained in the previous input system. 
 
-- **Monthly Producer Prices (Validated)** (SWS identifier: `monthly_producer_prices_prep`) 
+- **Monthly Producer Prices (Questionnaire)** (SWS identifier: `monthly_producer_prices_quest`): contains the monthly data loaded through the harvester.
 
-- **Purchasing Power Parities** (SWS identifier: `purchasing_power_parities`) 
 
 ### Elements description {-}
 
@@ -211,7 +210,7 @@ In addition to these three main codes there are codes that pertain to derived pr
 
 Transitioning from the current system to the SWS also the flag system is being updated. The conversion has been performed according to the following table:
 
-| **FLAG description** | **Current FIAS flag** | **FlagObservationStatus** | **FlagMethod**|
+| **FLAG description** | **Current ECO team flag** | **FlagObservationStatus** | **FlagMethod**|
 |:------|:----------|:---------|:---------|
 | Historical estimates (Prices domain) | ‘Fz’ | ‘E’ | ‘f’ |
 | FAO estimate | ‘F’ | ‘E’ | ‘f’ |

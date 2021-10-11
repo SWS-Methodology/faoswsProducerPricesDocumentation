@@ -8,6 +8,8 @@ Before starting the workflow it is very important the user verify all the auxili
 
 - The Consumer Price Indices dataset (for this operation the user could just once a year download the data from FAOSTAT and upload the file again in the SWS without opening it to avoid the loss of leading zeros in the .csv file).
 
+- The format of the questionnaire performing or not a preliminary data control and/or editing.
+
 The plugins also use data from the Macro Indicator and the Agriculture production domains, therefore the imputation process will use data as updated as these datasets.
 
 
@@ -15,36 +17,36 @@ The procedure to complete the workflow of the Producer prices compilation has 14
 
 1. Questionnaire harvester
 
-2. Plugin to revise and convert data from LCU to SLC and USD *pp_fromQuest2Prep*
+2. A first step of data editing revising and converting data from LCU to SLC and USD (plugin: *pp_fromQuest2Prep*)
 
-3. Plugin *pp_refuse_update* (optional if any questionnaire data is rejected)
+3. Completion and validation of data editing (plugin *pp_refuse_update*, optional if any questionnaire data is rejected)
 
-4. Plugin *pp_OutlierDetection*
+4. Outlier detection (plugin *pp_OutlierDetection*)
 
-5. Revision of detected outliers in the shiny application 'Outlier validation' tab
+5. Validation of detected outliers in the shiny application ('Outlier validation' tab)
 
-6. Plugin *PP_ImputationMethods* to impute missing data and/or interpolate series
+6. Missing data imputation (plugin *PP_ImputationMethods*)
 
-7. Imputation step to perform through the shiny app: 'Missing data imputation'  
+7. Data analysis and validation of the imputation step in the shiny app ('Missing data imputation' tab) 
 
-8. Review and validate interpolated data in the shiny 'Interpolation' tabs
+8. Data analysis and validation of interpolated data in the shiny app ('Interpolation' tabs)
 
-9. If needed a tab to revise series is available in the shiny app 'Series revision' tab
+9. Data analysis and validation of time series in the shiny app ('Series revision' tab)
 
-10. Transfer imputed data to the dataset through the plugin *pp_save_validated_data*
+10. Validation of the output dataset (plugin: *pp_save_validated_data*)
 
-11. Transfer with tag the validated data to the validated dataset
+11. Transfer of validated data to the validated dataset
 
-12. Compute the PPIs through the *Producer Price Indices (PPI)* plugin
+12. Computation of derived indicators: PPIs (plugin: *Producer Price Indices (PPI)*)
 
-13. Compute the International dollar price and the Purchasing power parities through the *Geary-Khamis* plugin
+13. Computation of derived indicators: International dollar price and Purchasing power parities (plugin: *Geary-Khamis*)
 
 14. Transfer to the QI and the Dissemination domain the dataset to be published through tagged dataset
 
 
 # **Descritpion of each step from the user point of view** {#Harvester}
 
-## Producer prices harvester procedure
+## Data harvesting
 
 The first step of the Producer price workflow is to launch the harvester to import the data provided by the country through questionnaires.
 The questionnaire must respect the template as shown in \@ref(fig:QuestionnaireTemplate). The **M49 country code** must be in cell A2 of the first sheet of the Excel file (**without leading zeros** until further notice), product codes must follow the **CPC** classification, and the **currency must be properly reported** so that the harvester can detect any change in the currency during the period covered by the questionnaire.
@@ -86,7 +88,7 @@ knitr::include_graphics("img/QuestWF.jpg")
 
 
 
-## Transfer and convert LCU questionnaire data in SLC and USD  (Plugin: pp_fromQuest2Prep) {#fromQuest2Prep}
+## Data analysis and conversion from LCU to SLC and USD (Plugin: pp_fromQuest2Prep) {#fromQuest2Prep}
 
 The data stored in the questionnaire dataset undergo no transformation, they are imported only in LCU. The conversion both in SLC and USD takes place running the '**pp_fromQuest2Prep**' plugin.
 
@@ -135,7 +137,7 @@ By default the new value is retained and saved into the *preparation dataset*, b
 The data calculated by the plugin are saved into the **Annual Producer Prices (Preparation)** dataset.
 
 
-## Refuse questionnaire update (Plugin: pp_refuse_update) {#pp_refuse_update}
+## Data editing following the questionnaire harvester (Plugin: pp_refuse_update) {#pp_refuse_update}
 
 After the *pp_fromQuest2Prep* the user can check the datatable '*revisions2control*'. This datatable contains all latest questionnaire data that considerably differ from the previous year validated data (see previous paragraph for more details). The user can therefore compare the two values (new and validated one) and, if for any of them the revision has to be rejected, check the box in the last column '*refuse_update*' see figure \@ref(fig:refuserev).
 
@@ -151,7 +153,7 @@ knitr::include_graphics("img/refuserevplugin.png")
 ```
 
 
-## Outlier detection (Plugin: pp_OutlierDetection) {#pp_OutlierDetection}
+## Data analysis and quality control: Outlier detection (Plugin: pp_OutlierDetection) {#pp_OutlierDetection}
 
 After the data have been transferred from the Questionnaire to the Preparation dataset, and the data have been revised up to available year _t-1_ (being _t_ the last year available in the questionnaire) the outlier detection runs for the last available year _t_. The plugin **pp_OutlierDetection** identifies the outlier of the last questionnaire year applying three different methods: interquartile range (IQR) on the price level, interquartile range (IQR) on price variation, built-in in R function that applies the _supsmu_ method.
 
@@ -170,7 +172,7 @@ Please note this datatable serve no purpose in the workflow, it only provides an
 After the plugin has run the data in the **Annual Producer Prices (Preparation)** dataset must be saved again through the button 'Save to dataset' and will be reviewed in the shiny application.
 
 
-## Shiny application: outlier validation
+##  Data analysis and quality control: Outlier validation
 
 The purpose of the shiny application tab 'Outlier validation' is to review of the output of the plugin **pp_OutlierDetection**. The *shiny application* can be found at the url http://hqlprsws1.hq.un.fao.org:3838/shinyProducerPrices/. The application is also an essential tool for the imputation validation step and for the series revision that will be explained in the following chapters.
 
@@ -225,7 +227,7 @@ knitr::include_graphics("img/shinyoutbulk.png")
 ```
 
 
-## Data imputation and interpolation {#Imputation}
+## Missing data imputation and interpolation {#Imputation}
 
 
 After the outlier have been reviewed either for one or for all countries, the missing data imputation can be performed. The imputation of missing data first happens in the SWS via plugin and it is then assessed via shiny app.
@@ -254,7 +256,7 @@ knitr::include_graphics("img/ImpDT2.png")
 Neither of the two datatables should be reviewed by the user directly in the SWS, all operations are to be performed in the shiny application.
 
 
-## Shiny application: Missing data imputation
+## Missing data imputation control and validation
 
 The tab 'Missing data imputation' of the shiny application is dedicated to the review and the choice of the value to impute to missing values.
 The structure is similar to the 'Outlier validation' tab. The shiny automatically provides in the 'Country to review' box the list of country and in the 'Product to review' box the product that need imputation (figure \@ref(fig:shinyImp1)). 
@@ -284,7 +286,7 @@ knitr::include_graphics("img/shinyBulk1.png")
 ```
 
 
-## Shiny application: Interpolation
+## Interpolation control and validation
 
 With the same structure of imputation tab there is the 'Interpolation' tab where the user can look all the series for which an interpolation has been made by the plugin. The list therefore includes all series that have an official value at the latest year 't' but have imputed data at time 't-1'. In this way the user can review the previous imputation and check if it is in line with the latest official data.
 Depending on the expert assessment, the interpolation proposed by the plugin can be accepted (green button) or refused (red button). Each assessment is saved into SWS and will be transferred to the dataset at the end of the process.
@@ -293,7 +295,7 @@ Depending on the expert assessment, the interpolation proposed by the plugin can
 knitr::include_graphics("img/shinyInterp.png")
 ```
 
-## Shiny application: Series revision
+## Data analysis and series revision
 
 In case there is need of a broader revision of the series, the 'Series revision' tab is available. Here the user needs to select manually the series to visualize (country, start year, end year and commodity). Since this imputation is performed directly in the shiny application and the new values need to be overwritten directly in the 'Annual Producer Prices (Preparation)' dataset dataset, please make sure of which session the shiny is connected to. It should be the same as the one selected for the outlier validation. The shiny app will write on the session selected. 
 Once the series is selected, imputation according all the available methods is displayed in the graphs of the page. As in the 'Missing data imputation' tab, the user can select the approach to impute and 'Validate' the series (figure \@ref(fig:shinySeries1)). 
@@ -305,7 +307,7 @@ knitr::include_graphics("img/shinySeries1.png")
 ```
 
 
-## Plugin: pp_save_validated_data {#validateimputation}
+## Dataset validation (Plugin: pp_save_validated_data) {#validateimputation}
 
 The validation of the imputation process from the shiny app involves only a modification in the datatable 'imputation_annual_prices' and 'interpolation_annual_prices'. In order to transfer the choices to the 'Annual Producer Prices (Preparation)' dataset and complete the workflow, the plugin 'pp_save_validated_data' must run.
 From the session of the dataset 'Annual Producer Prices (Preparation)' used by the shiny app, the user can run the plugin as described in figure \@ref(fig:save_valid_data). No manual parameter is required.
@@ -317,7 +319,7 @@ knitr::include_graphics("img/save_valid_data.png")
 The plugin reads from the imputation and interpolation datatables, it assigns the appropriate flag depending on the chosen estimation approach and attach metadata to each figure about the approach.
 Because all the imputation is performed considering prices in SLC, the plugin also converts values in LCU and USD. The approach is the same as the one in 'pp_fromQuest2Prep' plugin.
 
-## Transfer with tag the validated data to the validated dataset
+## Final data validation and output transfer
 
 The 'Annual Producer Prices (Preparation)' is a working dataset where the history will contain all the revisions made throughout the workflow, including provisional revisions not useful to keep as record.
 For this reason once all the operation of outlier detection and data imputation are complete the dataset can be transfered to the validated dataset.
@@ -350,7 +352,7 @@ knitr::include_graphics("img/Tag3tris.png")
 When the operation is concluded the data will appear in the new validated dataset.
 
 
-## Compute the PPIs through the *Producer Price Indices (PPI)* plugin
+## Derived indicator calculation: PPIs  (Plugin: Producer Price Indices (PPI))
 
 After the Producer prices data process is complete the Producer Price Indices can be calculated.
 From a session of the 'Annual Producer Prices (Validated)' dataset run the plugin **Producer Price Indices (PPI)** (figures \@ref(fig:ppi1) and \@ref(fig:ppi2)).
@@ -370,7 +372,7 @@ knitr::include_graphics("img/PPI2.png")
 
 Once the plugin runs, the PPIs can be saved into the dataset through the button 'Save to dataset'.
 
-## Compute the International dollar price and the Purchasing power parities through the *Geary-Khamis* plugin
+## Derived indicator calculation: Compute the International dollar price and the Purchasing power parities (Plugin: Geary-Khamis)
 
 Depending on the dataset the plugin is run from, the result will be either the International Dollar price or the Purchasing Power parity for the selected country. To run the plugin, open a session either for the 'Purchasing Power Parities' dataset or for the 'International Dollar Prices' and run the plgin filling in the parameters as in figure \@ref(fig:gk1).
 The parameters are the same as in the PPI plugin plus the code of the selected country.
@@ -379,7 +381,8 @@ The parameters are the same as in the PPI plugin plus the code of the selected c
 knitr::include_graphics("img/Geary-Khamis1.png")
 ```
 
-## Transfer to the QI and the Dissemination domain the dataset to be published through tagged dataset
 
-Once all the data have been calculated and validated it is possible to tag all the data as described in the paragraph and tranfer the tags to the Dissemination and QI domain respectively for Dissemination in FAOSTAT and for the calculaiton of Quality Indicators.
+## Data dissemination preparation through Dissemination domain
+
+Once all the data have been calculated and validated it is possible to tag all the data as described in the previous paragraph and tranfer the tags to the Dissemination domain respectively for Dissemination in FAOSTAT.
 
